@@ -118,9 +118,6 @@
 
         /* 返回按钮样式 */
         .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -128,7 +125,6 @@
             color: white;
             cursor: pointer;
             backdrop-filter: blur(5px);
-            display: none; /* 默认隐藏 */
         }
 
         /* 动画定义 */
@@ -303,10 +299,8 @@
         <button onclick="speedUp()">加速</button>
         <button onclick="slowDown()">减速</button>
         <button onclick="toggleMusic()">音乐开关</button> <!-- 添加音乐开关按钮 -->
+        <button class="back-button" onclick="goBack()">返回</button> <!-- 移动返回按钮 -->
     </div>
-
-    <!-- 返回按钮 -->
-    <button class="back-button" onclick="goBack()">返回</button>
 
     <audio id="bgm" loop>
         <source src="http://music.163.com/song/media/outer/url?id=1821888278.mp3" type="audio/mpeg">
