@@ -33,6 +33,23 @@
             animation: moveStars 50s linear infinite;
         }
 
+        /* 雪花样式 */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
         /* 相册首页样式 */
         .album-home {
             position: absolute;
@@ -53,8 +70,10 @@
             flex-wrap: wrap; /* 允许换行 */
         }
         .album-home .thumbnails img {
-            width: 150px;
-            height: 100px;
+            width: 100%;
+            height: auto;
+            max-width: 150px; /* 设置最大宽度 */
+            max-height: 100px; /* 设置最大高度 */
             object-fit: cover;
             border-radius: 10px;
             cursor: pointer;
@@ -344,6 +363,24 @@
             }
         }
         createStars();
+
+        // 动态创建雪花
+        function createSnowflakes() {
+            const snowflakeCount = 800; // 雪花数量
+            const body = document.body;
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = `${Math.random() * 800}vw`;
+                snowflake.style.width = `${Math.random() * 5 + 2}px`;
+                snowflake.style.height = snowflake.style.width;
+                snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                snowflake.style.animationDelay = `${Math.random() * 3}s`;
+                body.appendChild(snowflake);
+            }
+        }
+        createSnowflakes();
 
         // 音乐开关功能
         const bgm = document.getElementById('bgm');
