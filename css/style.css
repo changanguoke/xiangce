@@ -1,0 +1,16 @@
+.gallery-container {
+    perspective: 1000px;
+}
+
+.image-track {
+    transform-style: preserve-3d;
+}
+
+.image-item {
+    transform: rotateY(20deg);
+    transition: all 0.3s;
+}
+
+.image-item:hover {
+    transform: scale(1.1) rotateY(0deg);
+}

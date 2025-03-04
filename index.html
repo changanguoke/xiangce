@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* 页面基础样式 */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d); /* 渐变背景 */
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 星空背景效果 */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: twinkle 3s infinite;
+        }
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 100px 200px white, 
+                        250px 150px white,
+                        400px 300px white;
+            animation: moveStars 50s linear infinite;
+        }
+
+        /* 相册首页样式 */
+        .album-home {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+        }
+        .album-home h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .album-home .thumbnails {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap; /* 允许换行 */
+        }
+        .album-home .thumbnails img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .album-home .thumbnails img:hover {
+            transform: scale(1.1);
+        }
+
+        /* 图片移动容器 */
+        .gallery-container {
+            position: relative;
+            width: 80vw;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            display: none; /* 默认隐藏 */
+        }
+
+        /* 图片轨道 */
+        .image-track {
+            display: flex;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            gap: 4vw;
+            animation: slide 30s linear infinite; /* 修复动画持续时间 */
+        }
+
+        /* 单张图片样式 */
+        .image-item {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer; /* 添加鼠标指针样式 */
+        }
+
+        /* 控制按钮样式 */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+            display: none; /* 默认隐藏 */
+        }
+        .controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 返回按钮样式 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            display: none; /* 默认隐藏 */
+        }
+
+        /* 动画定义 */
+        @keyframes slide {
+            0% { transform: translate(-50%, -50%) translateX(0); }
+            100% { transform: translate(-50%, -50%) translateX(-50%); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes moveStars {
+            100% { transform: translate(-100vw, -100vh); }
+        }
+
+        /* 悬停效果 */
+        .image-item:hover {
+            transform: scale(1.05) rotate(2deg);
+            z-index: 10;
+        }
+
+        /* 放大图片样式 */
+        .image-item.enlarged {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.5); /* 改为放大50% */
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .album-home h1 {
+                font-size: 2em;
+            }
+            .album-home .thumbnails img {
+                width: 100px;
+                height: 75px;
+            }
+            .gallery-container {
+                width: 90vw;
+                height: 300px;
+            }
+            .image-item {
+                width: 200px;
+                height: 150px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .controls button {
+                padding: 5px 10px;
+            }
+            .back-button {
+                padding: 5px 10px;
+            }
+        }
+<<<<<<< HEAD
+
+        /* 进一步适配更小屏幕 */
+        @media (max-width: 480px) {
+            .album-home h1 {
+                font-size: 1.5em;
+            }
+            .album-home .thumbnails img {
+                width: 80px;
+                height: 60px;
+            }
+            .gallery-container {
+                width: 95vw;
+                height: 250px;
+            }
+            .image-item {
+                width: 150px;
+                height: 100px;
+            }
+            .controls button {
+                padding: 3px 5px;
+                font-size: 0.8em;
+            }
+            .back-button {
+                padding: 3px 5px;
+                font-size: 0.8em;
+            }
+        }
+
+        /* 左右箭头按钮样式 */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .left-arrow {
+            left: 10px;
+        }
+        .right-arrow {
+            right: 10px;
+        }
+=======
+>>>>>>> 2a3390ade452faae61da51406f2ece690cb28e53
+    </style>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars"></div>
+
+    <!-- 相册首页 -->
+    <div class="album-home">
+        <h1>欢迎来到相册</h1>
+        <div class="thumbnails">
+            <img src="img/image (1).jpg" onclick="showGallery(1)">
+            <img src="img/image (2).jpg" onclick="showGallery(2)">
+            <img src="img/image (3).jpg" onclick="showGallery(3)">
+            <img src="img/image (4).jpg" onclick="showGallery(4)">
+        </div>
+    </div>
+
+    <!-- 图片移动容器 -->
+    <div class="gallery-container" id="gallery-1">
+        <div class="image-track">
+            <img src="img/image (1).jpg" class="image-item">
+            <img src="img/image (2).jpg" class="image-item">
+            <img src="img/image (3).jpg" class="image-item">
+            <img src="img/image (4).jpg" class="image-item">
+<<<<<<< HEAD
+=======
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-2">
+        <div class="image-track">
+            <img src="img/image (5).jpg" class="image-item">
+            <img src="img/image (6).jpg" class="image-item">
+            <img src="img/image (7).jpg" class="image-item">
+            <img src="img/image (8).jpg" class="image-item">
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-3">
+        <div class="image-track">
+            <img src="img/image (9).jpg" class="image-item">
+            <img src="img/image (10).jpg" class="image-item">
+            <img src="img/image (11).jpg" class="image-item">
+            <img src="img/image (12).jpg" class="image-item">
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-4">
+        <div class="image-track">
+            <img src="img/image (13).jpg" class="image-item">
+            <img src="img/image (14).jpg" class="image-item">
+            <img src="img/image (15).jpg" class="image-item">
+            <img src="img/image (16).jpg" class="image-item">
+>>>>>>> 2a3390ade452faae61da51406f2ece690cb28e53
+        </div>
+        <button class="arrow left-arrow" onclick="moveLeft(1)">&#10094;</button>
+        <button class="arrow right-arrow" onclick="moveRight(1)">&#10095;</button>
+    </div>
+
+    <div class="gallery-container" id="gallery-2">
+        <div class="image-track">
+            <img src="img/image (5).jpg" class="image-item">
+            <img src="img/image (6).jpg" class="image-item">
+            <img src="img/image (7).jpg" class="image-item">
+            <img src="img/image (8).jpg" class="image-item">
+        </div>
+        <button class="arrow left-arrow" onclick="moveLeft(2)">&#10094;</button>
+        <button class="arrow right-arrow" onclick="moveRight(2)">&#10095;</button>
+    </div>
+
+    <div class="gallery-container" id="gallery-3">
+        <div class="image-track">
+            <img src="img/image (9).jpg" class="image-item">
+            <img src="img/image (10).jpg" class="image-item">
+            <img src="img/image (11).jpg" class="image-item">
+            <img src="img/image (12).jpg" class="image-item">
+        </div>
+        <button class="arrow left-arrow" onclick="moveLeft(3)">&#10094;</button>
+        <button class="arrow right-arrow" onclick="moveRight(3)">&#10095;</button>
+    </div>
+
+    <div class="gallery-container" id="gallery-4">
+        <div class="image-track">
+            <img src="img/image (13).jpg" class="image-item">
+            <img src="img/image (14).jpg" class="image-item">
+            <img src="img/image (15).jpg" class="image-item">
+            <img src="img/image (16).jpg" class="image-item">
+        </div>
+        <button class="arrow left-arrow" onclick="moveLeft(4)">&#10094;</button>
+        <button class="arrow right-arrow" onclick="moveRight(4)">&#10095;</button>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div class="controls">
+        <button onclick="toggleAnimation()">暂停/播放</button>
+        <button onclick="speedUp()">加速</button>
+        <button onclick="slowDown()">减速</button>
+        <button onclick="toggleMusic()">音乐开关</button> <!-- 添加音乐开关按钮 -->
+    </div>
+
+    <!-- 返回按钮 -->
+    <button class="back-button" onclick="goBack()">返回</button>
+
+    <audio id="bgm" loop>
+        <source src="http://music.163.com/song/media/outer/url?id=1821888278.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const track = document.querySelector('.image-track');
+        let isPlaying = true;
+        let speed = 30;
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            track.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        }
+
+        function speedUp() {
+            speed = Math.max(5, speed - 5);
+            track.style.animationDuration = `${speed}s`;
+        }
+
+        function slowDown() {
+            speed = Math.min(60, speed + 5);
+            track.style.animationDuration = `${speed}s`;
+        }
+
+        // 动态创建更多星星
+        function createStars() {
+            const stars = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 3}px;
+                    height: ${Math.random() * 3}px;
+                    background: rgba(255,255,255,${Math.random()});
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    animation: moveStars ${Math.random() * 80 + 30}s linear infinite;
+                `;
+                stars.appendChild(star);
+            }
+        }
+        createStars();
+
+        // 音乐开关功能
+        const bgm = document.getElementById('bgm');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgm.pause();
+            } else {
+                bgm.play();
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // 自动播放音乐
+        window.addEventListener('load', () => {
+            bgm.play().catch(error => {
+                console.log('自动播放被阻止:', error);
+            });
+        });
+
+        // 点击图片放大功能，放大时暂停图片滚动，恢复后继续滚动
+        document.querySelectorAll('.image-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                event.stopPropagation();  // 防止事件冒泡，避免立即触发取消放大
+                let isEnlarged = item.classList.toggle('enlarged');
+                if (isEnlarged) {
+                    // 放大时暂停滚动动画
+                    const track = document.querySelector('.image-track');
+                    track.style.animationPlayState = 'paused';
+
+                    // 点击其他区域取消放大效果，并恢复滚动动画
+                    document.addEventListener('click', function removeEnlarged(e) {
+                        if (!item.contains(e.target)) {
+                            item.classList.remove('enlarged');
+                            track.style.animationPlayState = 'running';
+                            document.removeEventListener('click', removeEnlarged);
+                        }
+                    });
+                } else {
+                    // 如果直接点击已放大图片取消放大，恢复滚动动画
+                    const track = document.querySelector('.image-track');
+                    track.style.animationPlayState = 'running';
+                }
+            });
+        });
+
+        // 显示相册功能
+        function showGallery(albumNumber) {
+            document.querySelector('.album-home').style.display = 'none';
+            document.querySelectorAll('.gallery-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.getElementById(`gallery-${albumNumber}`).style.display = 'block';
+            document.querySelector('.controls').style.display = 'flex';
+            document.querySelector('.back-button').style.display = 'block';
+        }
+
+        // 返回相册首页功能
+        function goBack() {
+            document.querySelector('.album-home').style.display = 'block';
+            document.querySelectorAll('.gallery-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.back-button').style.display = 'none';
+        }
+<<<<<<< HEAD
+
+        function moveLeft(galleryNumber) {
+            const track = document.querySelector(`#gallery-${galleryNumber} .image-track`);
+            track.scrollBy({ left: -300, behavior: 'smooth' });
+        }
+
+        function moveRight(galleryNumber) {
+            const track = document.querySelector(`#gallery-${galleryNumber} .image-track`);
+            track.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+=======
+>>>>>>> 2a3390ade452faae61da51406f2ece690cb28e53
+    </script>
+</body>
+</html>
