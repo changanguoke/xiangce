@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* 页面基础样式 */
         body {
@@ -33,23 +34,6 @@
             animation: moveStars 50s linear infinite;
         }
 
-        /* 雪花样式 */
-        .snowflake {
-            position: absolute;
-            top: -10px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-            }
-        }
-
         /* 相册首页样式 */
         .album-home {
             position: absolute;
@@ -70,10 +54,8 @@
             flex-wrap: wrap; /* 允许换行 */
         }
         .album-home .thumbnails img {
-            width: 100%;
-            height: auto;
-            max-width: 150px; /* 设置最大宽度 */
-            max-height: 100px; /* 设置最大高度 */
+            width: 150px;
+            height: 100px;
             object-fit: cover;
             border-radius: 10px;
             cursor: pointer;
@@ -87,7 +69,7 @@
         .gallery-container {
             position: relative;
             width: 80vw;
-            height: 400px;
+            height: 40vh;
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(0,0,0,0.4);
@@ -107,8 +89,8 @@
 
         /* 单张图片样式 */
         .image-item {
-            width: 300px;
-            height: 200px;
+            width: 30vw;
+            height: 20vh;
             object-fit: cover;
             border-radius: 10px;
             transition: transform 0.3s;
@@ -137,6 +119,9 @@
 
         /* 返回按钮样式 */
         .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -144,6 +129,7 @@
             color: white;
             cursor: pointer;
             backdrop-filter: blur(5px);
+            display: none; /* 默认隐藏 */
         }
 
         /* 动画定义 */
@@ -188,11 +174,11 @@
             }
             .gallery-container {
                 width: 90vw;
-                height: 300px;
+                height: 30vh;
             }
             .image-item {
-                width: 200px;
-                height: 150px;
+                width: 20vw;
+                height: 15vh;
             }
             .controls {
                 flex-direction: column;
@@ -217,11 +203,11 @@
             }
             .gallery-container {
                 width: 95vw;
-                height: 250px;
+                height: 25vh;
             }
             .image-item {
-                width: 150px;
-                height: 100px;
+                width: 15vw;
+                height: 10vh;
             }
             .controls button {
                 padding: 3px 5px;
@@ -232,29 +218,46 @@
                 font-size: 0.8em;
             }
         }
-
-        /* 左右箭头按钮样式 */
-        .arrow {
+        /* 雪花背景样式 */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .snowflake {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 100;
+            color: #fff;
+            font-size: 1em;
+            opacity: 0;
+            animation: fall linear infinite;
         }
-        .left-arrow {
-            left: 10px;
-        }
-        .right-arrow {
-            right: 10px;
+        
+        @keyframes fall {
+            0% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+            }
         }
     </style>
+</head>
 <body>
     <!-- 星空背景 -->
     <div class="stars"></div>
+    
+    <!-- 雪花容器 -->
+    <div class="snowflakes"></div>
 
     <!-- 相册首页 -->
     <div class="album-home">
@@ -275,8 +278,6 @@
             <img src="img/image (3).jpg" class="image-item">
             <img src="img/image (4).jpg" class="image-item">
         </div>
-        <button class="arrow left-arrow" onclick="moveLeft(1)">&#10094;</button>
-        <button class="arrow right-arrow" onclick="moveRight(1)">&#10095;</button>
     </div>
 
     <div class="gallery-container" id="gallery-2">
@@ -286,8 +287,6 @@
             <img src="img/image (7).jpg" class="image-item">
             <img src="img/image (8).jpg" class="image-item">
         </div>
-        <button class="arrow left-arrow" onclick="moveLeft(2)">&#10094;</button>
-        <button class="arrow right-arrow" onclick="moveRight(2)">&#10095;</button>
     </div>
 
     <div class="gallery-container" id="gallery-3">
@@ -297,8 +296,6 @@
             <img src="img/image (11).jpg" class="image-item">
             <img src="img/image (12).jpg" class="image-item">
         </div>
-        <button class="arrow left-arrow" onclick="moveLeft(3)">&#10094;</button>
-        <button class="arrow right-arrow" onclick="moveRight(3)">&#10095;</button>
     </div>
 
     <div class="gallery-container" id="gallery-4">
@@ -308,8 +305,6 @@
             <img src="img/image (15).jpg" class="image-item">
             <img src="img/image (16).jpg" class="image-item">
         </div>
-        <button class="arrow left-arrow" onclick="moveLeft(4)">&#10094;</button>
-        <button class="arrow right-arrow" onclick="moveRight(4)">&#10095;</button>
     </div>
 
     <!-- 控制按钮 -->
@@ -318,9 +313,8 @@
         <button onclick="speedUp()">加速</button>
         <button onclick="slowDown()">减速</button>
         <button onclick="toggleMusic()">音乐开关</button> <!-- 添加音乐开关按钮 -->
-        <button class="back-button" onclick="goBack()">返回</button> <!-- 移动返回按钮 -->
+        <button ondblclick="back-button" onclick="goBack()">返回</button>  <!-- 返回按钮 -->
     </div>
-
     <audio id="bgm" loop>
         <source src="http://music.163.com/song/media/outer/url?id=1821888278.mp3" type="audio/mpeg">
     </audio>
@@ -364,24 +358,6 @@
         }
         createStars();
 
-        // 动态创建雪花
-        function createSnowflakes() {
-            const snowflakeCount = 800; // 雪花数量
-            const body = document.body;
-
-            for (let i = 0; i < snowflakeCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                snowflake.style.left = `${Math.random() * 800}vw`;
-                snowflake.style.width = `${Math.random() * 5 + 2}px`;
-                snowflake.style.height = snowflake.style.width;
-                snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
-                snowflake.style.animationDelay = `${Math.random() * 3}s`;
-                body.appendChild(snowflake);
-            }
-        }
-        createSnowflakes();
-
         // 音乐开关功能
         const bgm = document.getElementById('bgm');
         let isMusicPlaying = false;
@@ -402,29 +378,61 @@
             });
         });
 
-        // 点击图片放大功能，放大时暂停图片滚动，恢复后继续滚动
+        // 替换原有的点击图片放大功能代码
         document.querySelectorAll('.image-item').forEach(item => {
             item.addEventListener('click', (event) => {
-                event.stopPropagation();  // 防止事件冒泡，避免立即触发取消放大
-                let isEnlarged = item.classList.toggle('enlarged');
-                if (isEnlarged) {
-                    // 放大时暂停滚动动画
-                    const track = document.querySelector('.image-track');
-                    track.style.animationPlayState = 'paused';
-
-                    // 点击其他区域取消放大效果，并恢复滚动动画
-                    document.addEventListener('click', function removeEnlarged(e) {
-                        if (!item.contains(e.target)) {
-                            item.classList.remove('enlarged');
-                            track.style.animationPlayState = 'running';
-                            document.removeEventListener('click', removeEnlarged);
-                        }
-                    });
-                } else {
-                    // 如果直接点击已放大图片取消放大，恢复滚动动画
-                    const track = document.querySelector('.image-track');
-                    track.style.animationPlayState = 'running';
-                }
+                event.stopPropagation();
+                
+                // 创建遮罩层
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                `;
+                
+                // 创建大图
+                const enlargedImg = document.createElement('img');
+                enlargedImg.src = item.src;
+                enlargedImg.style.cssText = `
+                    max-width: 90vw;
+                    max-height: 90vh;
+                    object-fit: contain;
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                    transform: scale(0.9);
+                    transition: transform 0.3s;
+                `;
+                
+                // 添加到页面
+                overlay.appendChild(enlargedImg);
+                document.body.appendChild(overlay);
+                
+                // 动画效果
+                setTimeout(() => {
+                    enlargedImg.style.transform = 'scale(1)';
+                }, 10);
+                
+                // 暂停轨道动画
+                const track = document.querySelector('.image-track');
+                track.style.animationPlayState = 'paused';
+                
+                // 点击遮罩层关闭
+                overlay.addEventListener('click', () => {
+                    enlargedImg.style.transform = 'scale(0.9)';
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(overlay);
+                        track.style.animationPlayState = 'running';
+                    }, 300);
+                });
             });
         });
 
@@ -449,15 +457,33 @@
             document.querySelector('.back-button').style.display = 'none';
         }
 
-        function moveLeft(galleryNumber) {
-            const track = document.querySelector(`#gallery-${galleryNumber} .image-track`);
-            track.scrollBy({ left: -300, behavior: 'smooth' });
+        // 创建雪花
+        function createSnowflakes() {
+            const snowflakesContainer = document.querySelector('.snowflakes');
+            const snowflakeChars = ['❅', '❆', '❄'];
+            
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.style.left = Math.random() * 500 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2-5秒
+                snowflake.style.opacity = Math.random();
+                snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+                
+                snowflakesContainer.appendChild(snowflake);
+                
+                // 当动画结束后移除雪花
+                snowflake.addEventListener('animationend', () => {
+                    snowflake.remove();
+                });
+            }
+            
+            // 每200ms创建一个新雪花
+            setInterval(createSnowflake, 50);
         }
-
-        function moveRight(galleryNumber) {
-            const track = document.querySelector(`#gallery-${galleryNumber} .image-track`);
-            track.scrollBy({ left: 300, behavior: 'smooth' });
-        }
+        
+        // 页面加载完成后启动雪花效果
+        window.addEventListener('load', createSnowflakes);
     </script>
 </body>
 </html>
