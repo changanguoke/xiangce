@@ -9,20 +9,21 @@
         body {
             margin: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(45deg, #1a1a1a, #2d2d2d); /* 渐变背景 */
-            overflow: hidden;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            overflow-y: auto; /* 允许页面纵向滚动 */
             position: relative;
+            padding: 0; /* 移除内边距 */
         }
 
         /* 星空背景效果 */
         .stars {
-            position: absolute;
+            position: fixed; /* 改为固定定位 */
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             animation: twinkle 3s infinite;
+            pointer-events: none;
         }
         .stars::before {
             content: '';
@@ -38,7 +39,7 @@
 
         /* 雪花背景效果 */
         .snowflakes {
-            position: fixed;
+            position: fixed; /* 改为固定定位 */
             top: 0;
             left: 0;
             width: 100%;
@@ -71,26 +72,32 @@
 
         /* 相册首页样式 */
         .album-home {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative; /* 改为相对定位 */
+            width: 80%;
+            max-width: 1200px;
+            margin: 50px auto; /* 添加上下外边距 */
+            padding: 20px;
             text-align: center;
             color: white;
+            min-height: 100vh; /* 确保最小高度为视口高度 */
+            overflow-y: auto; /* 允许纵向滚动 */
         }
         .album-home h1 {
             font-size: 3em;
             margin-bottom: 20px;
         }
         .album-home .thumbnails {
-            display: flex;
+            display: grid; /* 使用网格布局 */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* 响应式网格 */
             gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap; /* 允许换行 */
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .album-home .thumbnails img {
-            width: 150px;
-            height: 100px;
+            width: 100%;
+            height: 200px;
             object-fit: cover;
             border-radius: 10px;
             cursor: pointer;
@@ -102,14 +109,17 @@
 
         /* 图片移动容器 */
         .gallery-container {
-            position: relative;
+            position: fixed; /* 改为固定定位 */
+            top: 50%; /* 垂直居中 */
+            left: 50%; /* 水平居中 */
+            transform: translate(-50%, -50%); /* 完全居中 */
             width: 80vw;
             height: 40vh;
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(0,0,0,0.4);
-            display: none; /* 默认隐藏 */
-            margin: 0 auto;
+            display: none;
+            z-index: 10; /* 确保在其他元素上方 */
         }
 
         /* 图片轨道 */
@@ -175,8 +185,12 @@
 
         /* 动画定义 */
         @keyframes slide {
-            0% { transform: translateY(-50%) translateX(0); }
-            100% { transform: translateY(-50%) translateX(calc(-100% + 100vw)); }
+            0% { 
+                transform: translateY(-50%) translateX(0);
+            }
+            100% { 
+                transform: translateY(-50%) translateX(calc(-100% - 8vw)); /* 修改移动距离 */
+            }
         }
 
         @keyframes twinkle {
@@ -218,8 +232,8 @@
                 height: 30vh;
             }
             .image-item {
-                width: 20vw;
-                height: 15vh;
+                width: 40vw;
+                height: 25vh;
             }
             .controls {
                 flex-direction: row; /* 保持水平排列 */
@@ -409,7 +423,10 @@
 
         .image-item-container {
             position: relative;
-            display: inline-block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 2vw;
         }
 
         .image-item-container:hover .music-player {
@@ -1051,7 +1068,6 @@
                     height: 100%;
                     background: rgba(0, 0, 0, 0.8);
                     display: flex;
-                    flex-direction: column;
                     justify-content: center;
                     align-items: center;
                     z-index: 1000;
@@ -1082,45 +1098,49 @@
                 // 创建内容容器
                 const contentContainer = document.createElement('div');
                 contentContainer.style.cssText = `
+                    position: relative;
                     display: flex;
                     flex-direction: column;
-                    gap: 20px;
-                    width: 90vw;
-                    max-width: 1600px;
-                    justify-content: center;
                     align-items: center;
-                    margin-bottom: 20px;
+                    justify-content: center;
+                    width: 90%;
+                    max-width: 1200px;
+                    height: 90vh;
+                    margin: 0 auto;
                 `;
 
                 // 创建媒体容器（用于放置图片和视频）
                 const mediaContainer = document.createElement('div');
                 mediaContainer.style.cssText = `
+                    position: relative;
                     display: flex;
                     flex-direction: row;
-                    gap: 20px;
-                    width: 100%;
                     justify-content: center;
                     align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    gap: 20px;
                 `;
 
                 // 创建图片容器
                 const imageContainer = document.createElement('div');
                 imageContainer.style.cssText = `
-                    flex: 1;
-                    max-width: 45%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: ${item.dataset.video ? '45%' : '90%'};
+                    height: 100%;
                 `;
 
                 // 创建放大后的图片
                 const enlargedImg = document.createElement('img');
                 enlargedImg.src = item.src;
                 enlargedImg.style.cssText = `
-                    width: 100%;
+                    max-width: 100%;
                     max-height: 80vh;
                     object-fit: contain;
                     border-radius: 10px;
                     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-                    transform: scale(0.9);
-                    transition: transform 0.3s;
                 `;
                 imageContainer.appendChild(enlargedImg);
 
@@ -1128,20 +1148,20 @@
                 if (item.dataset.video) {
                     const videoContainer = document.createElement('div');
                     videoContainer.style.cssText = `
-                        flex: 2;
-                        max-width: 60%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 55%;
+                        height: 100%;
                     `;
 
                     const video = document.createElement('video');
                     video.style.cssText = `
-                        width: 100%;
+                        max-width: 100%;
                         max-height: 80vh;
                         object-fit: contain;
                         border-radius: 10px;
-                        box-shadow: none; /* 取消阴影效果 */
-                        transform: scale(0.95);
-                        transition: transform 0.3s;
-                        filter: brightness(1.2); /* 提高亮度 */
+                        filter: brightness(1.2);
                     `;
                     video.controls = true;
                     video.src = item.dataset.video;
@@ -1210,6 +1230,16 @@
                         }
                     });
                     
+                    musicPlayerContainer.style.cssText = `
+                        position: absolute;
+                        bottom: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(0, 0, 0, 0.6);
+                        padding: 10px;
+                        border-radius: 10px;
+                        z-index: 1002;
+                    `;
                     musicPlayerContainer.appendChild(audio);
                 }
 
