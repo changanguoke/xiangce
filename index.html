@@ -1010,6 +1010,113 @@
             });
         });
 
+        // 修改点击图片事件处理代码部分
+
+        document.querySelectorAll('.image-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                event.stopPropagation();
+                
+                // 立即暂停所有媒体内容
+                const allMedia = document.querySelectorAll('video, audio');
+                allMedia.forEach(media => {
+                    media.pause();
+                    if(media.tagName === 'VIDEO') {
+                        media.currentTime = 0;
+                    }
+                });
+                
+                // 创建遮罩层...（保持原有代码）
+                
+                // 修改视频处理部分
+                if (item.dataset.video) {
+                    const videoContainer = document.createElement('div');
+                    // ...原有的视频容器样式代码...
+                    
+                    const video = document.createElement('video');
+                    // ...原有的视频样式代码...
+                    
+                    // 修改视频加载和播放逻辑
+                    video.addEventListener('loadeddata', () => {
+                        video.play().then(() => {
+                            video.muted = false;
+                            // 确保音频不会自动播放
+                            const overlayAudio = overlay.querySelector('.overlay-music-player audio');
+                            if(overlayAudio) {
+                                overlayAudio.pause();
+                            }
+                        }).catch(console.error);
+                    });
+
+                    // 添加视频播放事件监听
+                    video.addEventListener('play', () => {
+                        // 暂停所有音频
+                        document.querySelectorAll('audio').forEach(audio => {
+                            audio.pause();
+                        });
+                    });
+                }
+                
+                // 修改音频播放器部分
+                const musicPlayerContainer = document.createElement('div');
+                musicPlayerContainer.className = 'overlay-music-player';
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                
+                // 添加音频播放事件监听
+                audio.addEventListener('play', () => {
+                    // 暂停视频播放
+                    const currentVideo = overlay.querySelector('video');
+                    if(currentVideo) {
+                        currentVideo.pause();
+                    }
+                    
+                    // 暂停其他音频
+                    document.querySelectorAll('audio').forEach(otherAudio => {
+                        if(otherAudio !== audio) {
+                            otherAudio.pause();
+                        }
+                    });
+                });
+                
+                // 点击关闭按钮时的处理
+                const closeOverlay = () => {
+                    // 确保所有媒体都停止播放
+                    overlay.querySelectorAll('video, audio').forEach(media => {
+                        media.pause();
+                        if(media.tagName === 'VIDEO') {
+                            media.currentTime = 0;
+                        }
+                    });
+                    
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(overlay);
+                        // 恢复轨道动画
+                        const track = document.querySelector('.image-track');
+                        track.style.animationPlayState = 'running';
+                    }, 300);
+                };
+                
+                // ...其余代码保持不变...
+            });
+        });
+
+        // 添加设备检测和触摸优化
+        document.addEventListener('DOMContentLoaded', () => {
+            const isTouchDevice = ('ontouchstart' in window) || 
+                                 (navigator.maxTouchPoints > 0) || 
+                                 (navigator.msMaxTouchPoints > 0);
+            
+            if(isTouchDevice) {
+                // 为触摸设备添加专门的事件处理
+                document.querySelectorAll('.image-item').forEach(item => {
+                    item.addEventListener('touchstart', (e) => {
+                        e.preventDefault(); // 防止触发多次
+                    }, {passive: false});
+                });
+            }
+        });
+
         // 修改点击图片放大功能的代码部分:
         document.querySelectorAll('.image-item').forEach(item => {
             item.addEventListener('click', (event) => {
