@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <style>
@@ -70,14 +71,12 @@
 
         /* 相册首页样式 */
         .album-home {
-            position: relative; /* 改为相对定位 */
-            width: 90%;
-            margin: 20px auto; /* 添加外边距 */
-            padding: 20px 0; /* 添加内边距 */
-            min-height: 100vh; /* 确保最小高度为视口高度 */
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
             color: white;
-            overflow-y: auto; /* 允许垂直滚动 */
-            -webkit-overflow-scrolling: touch; /* 支持 iOS 惯性滚动 */
         }
         .album-home h1 {
             font-size: 3em;
@@ -85,11 +84,9 @@
         }
         .album-home .thumbnails {
             display: flex;
-            flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            padding: 20px;
-            margin-bottom: 30px; /* 添加底部间距 */
+            flex-wrap: wrap; /* 允许换行 */
         }
         .album-home .thumbnails img {
             width: 150px;
@@ -209,10 +206,6 @@
 
         /* 移动端适配 */
         @media (max-width: 768px) {
-            body {
-                overflow-y: auto; /* 允许页面滚动 */
-            }
-            
             .album-home h1 {
                 font-size: 2em;
             }
@@ -238,22 +231,6 @@
             }
             .back-button {
                 padding: 5px 10px;
-            }
-            .album-home {
-                top: 0; /* 移除顶部定位 */
-                transform: none; /* 移除变换 */
-                margin-top: 40px; /* 添加顶部间距 */
-            }
-            
-            .album-home .thumbnails {
-                gap: 15px;
-                padding: 10px;
-            }
-            
-            .album-home .thumbnails img {
-                width: calc(50% - 15px); /* 每行两张图片 */
-                height: auto;
-                aspect-ratio: 3/2;
             }
         }
 
@@ -281,14 +258,6 @@
             .back-button {
                 padding: 3px 5px;
                 font-size: 0.8em;
-            }
-            .album-home {
-                width: 95%;
-                margin-top: 20px;
-            }
-            
-            .album-home .thumbnails img {
-                width: calc(100% - 20px); /* 每行一张图片 */
             }
         }
  
@@ -610,21 +579,20 @@
         /* 添加到现有的style标签中 */
         video {
             background: #000;
-            filter: brightness(1.5) contrast(1.5); /* 调整亮度和对比度 */
-            max-width: 100%;
-            height: auto;
-            box-shadow: none; /* 移除阴影效果 */
+            border-radius: 10px;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+            box-shadow: none; /* 取消阴影效果 */
         }
 
         video::-webkit-media-controls {
-            background-color: rgba(0, 0, 0, 0.3); /* 降低控制器背景透明度 */
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 5px;
             padding: 5px;
         }
 
         video::-webkit-media-controls-panel {
             color: white;
-            background-color: rgba(0, 0, 0, 0.2); /* 添加控制面板背景 */
         }
 
         @media (max-width: 768px) {
@@ -656,85 +624,8 @@
                 height: 35px;
             }
         }
-
-        /* 视频容器样式优化 */
-        .video-container {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: none; /* 移除容器阴影 */
-            backdrop-filter: blur(3px);
-        }
-
-        /* 添加触摸设备优化样式 */
-        @media (hover: none) and (pointer: coarse) {
-            .album-home {
-                padding: 20px;
-            }
-            
-            .album-home h1 {
-                font-size: calc(2rem + 2vw);
-                margin-bottom: 1.5rem;
-            }
-            
-            .album-home .thumbnails {
-                gap: 15px;
-                padding: 10px;
-            }
-            
-            .album-home .thumbnails img {
-                width: calc(50% - 15px);
-                height: auto;
-                aspect-ratio: 3/2;
-                transition: transform 0.2s ease;
-                -webkit-tap-highlight-color: transparent;
-            }
-            
-            /* 触摸时的反馈效果 */
-            .album-home .thumbnails img:active {
-                transform: scale(0.95);
-                opacity: 0.8;
-            }
-            
-            /* 移除悬停效果 */
-            .album-home .thumbnails img:hover {
-                transform: none;
-            }
-        }
-
-        /* 针对不同屏幕大小优化触摸体验 */
-        @media (hover: none) and (max-width: 480px) {
-            .album-home .thumbnails img {
-                width: calc(100% - 20px);
-                margin: 10px;
-            }
-        }
-
-        @media (hover: none) and (orientation: landscape) {
-            .album-home {
-                top: 5%;
-            }
-            
-            .album-home .thumbnails {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 10px;
-                max-height: 70vh;
-                overflow-y: auto;
-                padding: 10px;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .album-home .thumbnails::-webkit-scrollbar {
-                width: 5px;
-            }
-            
-            .album-home .thumbnails::-webkit-scrollbar-thumb {
-                background: rgba(255,255,255,0.2);
-                border-radius: 5px;
-            }
-        }
     </style>
+    <title>相册</title>
 </head>
 <body>
   <div id="snowflakes-container"></div>
@@ -752,6 +643,12 @@
             <img src="img/image (2).jpg" onclick="showGallery(2)">
             <img src="img/image (3).jpg" onclick="showGallery(3)">
             <img src="img/image (4).jpg" onclick="showGallery(4)">
+            <img src="img/image (5).jpg" onclick="showGallery(5)">
+            <img src="img/image (6).jpg" onclick="showGallery(6)">
+            <img src="img/image (7).jpg" onclick="showGallery(7)">
+            <img src="img/image (8).jpg" onclick="showGallery(8)">
+            <img src="img/image (9).jpg" onclick="showGallery(9)">
+            <img src="img/image (10).jpg" onclick="showGallery(10)">
         </div>
     </div>
 
@@ -775,7 +672,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item" data-video="videos/video3.mp4">
+                <img src="img/image (3).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -783,7 +680,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item" data-video="videos/video4.mp4">
+                <img src="img/image (4).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -796,7 +693,7 @@
     <div class="gallery-container" id="gallery-2">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (5).jpg" class="image-item">
+                <img src="img/image (1).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -804,7 +701,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (6).jpg" class="image-item">
+                <img src="img/image (2).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -812,7 +709,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (7).jpg" class="image-item">
+                <img src="img/image (3).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -820,7 +717,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (8).jpg" class="image-item">
+                <img src="img/image (4).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -833,7 +730,7 @@
     <div class="gallery-container" id="gallery-3">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (9).jpg" class="image-item">
+                <img src="img/image (1).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -841,7 +738,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (10).jpg" class="image-item">
+                <img src="img/image (2).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -849,7 +746,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (11).jpg" class="image-item">
+                <img src="img/image (3).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -857,7 +754,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (12).jpg" class="image-item">
+                <img src="img/image (4).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -870,7 +767,7 @@
     <div class="gallery-container" id="gallery-4">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (13).jpg" class="image-item">
+                <img src="img/image (1).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -878,7 +775,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (14).jpg" class="image-item">
+                <img src="img/image (2).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -886,7 +783,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (15).jpg" class="image-item">
+                <img src="img/image (3).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -894,7 +791,118 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (16).jpg" class="image-item">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="gallery-container" id="gallery-5">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-6">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-7">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -925,17 +933,29 @@
 
         function toggleAnimation() {
             isPlaying = !isPlaying;
-            track.style.animationPlayState = isPlaying ? 'running' : 'paused';
+            // 选择所有可见的轨道
+            const visibleTrack = document.querySelector('.gallery-container[style*="display: block"] .image-track');
+            if (visibleTrack) {
+                visibleTrack.style.animationPlayState = isPlaying ? 'running' : 'paused';
+            }
         }
 
         function speedUp() {
             speed = Math.max(5, speed - 5);
-            track.style.animationDuration = `${speed}s`;
+            // 选择所有可见的轨道
+            const visibleTrack = document.querySelector('.gallery-container[style*="display: block"] .image-track');
+            if (visibleTrack) {
+                visibleTrack.style.animationDuration = `${speed}s`;
+            }
         }
 
         function slowDown() {
             speed = Math.min(60, speed + 5);
-            track.style.animationDuration = `${speed}s`;
+            // 选择所有可见的轨道
+            const visibleTrack = document.querySelector('.gallery-container[style*="display: block"] .image-track');
+            if (visibleTrack) {
+                visibleTrack.style.animationDuration = `${speed}s`;
+            }
         }
 
         // 动态创建更多星星
@@ -1010,124 +1030,16 @@
             });
         });
 
-        // 修改点击图片事件处理代码部分
-
-        document.querySelectorAll('.image-item').forEach(item => {
-            item.addEventListener('click', (event) => {
-                event.stopPropagation();
-                
-                // 立即暂停所有媒体内容
-                const allMedia = document.querySelectorAll('video, audio');
-                allMedia.forEach(media => {
-                    media.pause();
-                    if(media.tagName === 'VIDEO') {
-                        media.currentTime = 0;
-                    }
-                });
-                
-                // 创建遮罩层...（保持原有代码）
-                
-                // 修改视频处理部分
-                if (item.dataset.video) {
-                    const videoContainer = document.createElement('div');
-                    // ...原有的视频容器样式代码...
-                    
-                    const video = document.createElement('video');
-                    // ...原有的视频样式代码...
-                    
-                    // 修改视频加载和播放逻辑
-                    video.addEventListener('loadeddata', () => {
-                        video.play().then(() => {
-                            video.muted = false;
-                            // 确保音频不会自动播放
-                            const overlayAudio = overlay.querySelector('.overlay-music-player audio');
-                            if(overlayAudio) {
-                                overlayAudio.pause();
-                            }
-                        }).catch(console.error);
-                    });
-
-                    // 添加视频播放事件监听
-                    video.addEventListener('play', () => {
-                        // 暂停所有音频
-                        document.querySelectorAll('audio').forEach(audio => {
-                            audio.pause();
-                        });
-                    });
-                }
-                
-                // 修改音频播放器部分
-                const musicPlayerContainer = document.createElement('div');
-                musicPlayerContainer.className = 'overlay-music-player';
-                const audio = document.createElement('audio');
-                audio.controls = true;
-                
-                // 添加音频播放事件监听
-                audio.addEventListener('play', () => {
-                    // 暂停视频播放
-                    const currentVideo = overlay.querySelector('video');
-                    if(currentVideo) {
-                        currentVideo.pause();
-                    }
-                    
-                    // 暂停其他音频
-                    document.querySelectorAll('audio').forEach(otherAudio => {
-                        if(otherAudio !== audio) {
-                            otherAudio.pause();
-                        }
-                    });
-                });
-                
-                // 点击关闭按钮时的处理
-                const closeOverlay = () => {
-                    // 确保所有媒体都停止播放
-                    overlay.querySelectorAll('video, audio').forEach(media => {
-                        media.pause();
-                        if(media.tagName === 'VIDEO') {
-                            media.currentTime = 0;
-                        }
-                    });
-                    
-                    overlay.style.opacity = '0';
-                    setTimeout(() => {
-                        document.body.removeChild(overlay);
-                        // 恢复轨道动画
-                        const track = document.querySelector('.image-track');
-                        track.style.animationPlayState = 'running';
-                    }, 300);
-                };
-                
-                // ...其余代码保持不变...
-            });
-        });
-
-        // 添加设备检测和触摸优化
-        document.addEventListener('DOMContentLoaded', () => {
-            const isTouchDevice = ('ontouchstart' in window) || 
-                                 (navigator.maxTouchPoints > 0) || 
-                                 (navigator.msMaxTouchPoints > 0);
-            
-            if(isTouchDevice) {
-                // 为触摸设备添加专门的事件处理
-                document.querySelectorAll('.image-item').forEach(item => {
-                    item.addEventListener('touchstart', (e) => {
-                        e.preventDefault(); // 防止触发多次
-                    }, {passive: false});
-                });
-            }
-        });
-
         // 修改点击图片放大功能的代码部分:
         document.querySelectorAll('.image-item').forEach(item => {
             item.addEventListener('click', (event) => {
                 event.stopPropagation();
                 
-                // 立即暂停背景音乐
+                // 点击图片时暂停背景音乐
                 const bgm = document.getElementById('bgm');
                 if (bgm && !bgm.paused) {
                     bgm.pause();
                 }
-                isMusicPlaying = false; // 设置音乐播放状态为关闭
                 
                 // 创建遮罩层
                 const overlay = document.createElement('div');
@@ -1215,15 +1127,9 @@
                 // 在创建视频元素的部分修改代码：
                 if (item.dataset.video) {
                     const videoContainer = document.createElement('div');
-                    videoContainer.className = 'video-container';
                     videoContainer.style.cssText = `
                         flex: 2;
                         max-width: 60%;
-                        background: rgba(0, 0, 0, 0.6);
-                        padding: 10px;
-                        border-radius: 15px;
-                        box-shadow: 0 0 30px rgba(0,0,0,0.3);
-                        backdrop-filter: blur(5px);
                     `;
 
                     const video = document.createElement('video');
@@ -1232,37 +1138,35 @@
                         max-height: 80vh;
                         object-fit: contain;
                         border-radius: 10px;
-                        filter: brightness(1.2);
+                        box-shadow: none; /* 取消阴影效果 */
                         transform: scale(0.95);
                         transition: transform 0.3s;
-                        box-shadow: 0 0 30px rgba(255,255,255,0.1);
+                        filter: brightness(1.2); /* 提高亮度 */
                     `;
                     video.controls = true;
                     video.src = item.dataset.video;
                     video.playsInline = true;
                     video.autoplay = true;
-                    video.muted = true;
                     
-                    // 视频加载完成后自动播放并取消静音
+                    // 添加音量控制
+                    video.volume = 0.5; // 设置默认音量为50%
+
+                    // 视频加载完成后自动播放并取消静音,同时暂停背景音乐
                     video.addEventListener('loadeddata', () => {
+                        // 先暂停背景音乐
+                        const bgm = document.getElementById('bgm');
+                        if (bgm && !bgm.paused) {
+                            bgm.pause();
+                        }
+                        
+                        // 尝试自动播放视频
                         video.play().then(() => {
                             video.muted = false;
-                            // 添加渐变效果
-                            video.style.transition = 'filter 0.5s ease';
-                            video.style.filter = 'brightness(1.2)';
                         }).catch(error => {
                             console.log('视频自动播放失败:', error);
                         });
                     });
 
-                    // 修改图片容器样式
-                    imageContainer.style.cssText = `
-                        flex: 1;
-                        max-width: 35%; // 减小图片容器的最大宽度
-                        margin-left: 20px; // 添加左边距
-                    `;
-
-                    // 调整添加顺序 - 先添加视频再添加图片
                     videoContainer.appendChild(video);
                     mediaContainer.appendChild(videoContainer);
                     mediaContainer.appendChild(imageContainer);
@@ -1340,7 +1244,12 @@
                         // 恢复轨道动画
                         const track = document.querySelector('.image-track');
                         track.style.animationPlayState = 'running';
-                        // 不自动恢复背景音乐
+                        // 恢复背景音乐（如果之前是播放状态）
+                        if (bgm && isMusicPlaying) {
+                            bgm.play().catch(error => {
+                                console.log('背景音乐恢复播放失败:', error);
+                            });
+                        }
                     }, 300);
                 };
 
@@ -1381,10 +1290,13 @@
             document.querySelector('.back-button').style.display = 'block';
             
             // 重置动画
-            const track = document.querySelector('.image-track');
-            track.style.animation = 'none';
-            track.offsetHeight; // 触发重排
-            track.style.animation = 'slide 30s linear infinite';
+            const track = document.querySelector(`#gallery-${albumNumber} .image-track`);
+            if (track) {
+                track.style.animation = 'none';
+                track.offsetHeight; // 触发重排
+                track.style.animation = `slide ${speed}s linear infinite`;
+                track.style.animationPlayState = isPlaying ? 'running' : 'paused';
+            }
             
             // 自动播放背景音乐
             const bgm = document.getElementById('bgm');
