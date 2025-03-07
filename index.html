@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <style>
+        /* 页面基础样式 */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d); /* 渐变背景 */
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 星空背景效果 */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: twinkle 3s infinite;
+        }
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 100px 200px white, 
+                        250px 150px white,
+                        400px 300px white;
+            animation: moveStars 50s linear infinite;
+        }
+
+        /* 雪花背景效果 */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1em;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                opacity: 0;
+                transform: translateY(-20vh) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* 相册首页样式 */
+        .album-home {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+        }
+        .album-home h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .album-home .thumbnails {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap; /* 允许换行 */
+        }
+        .album-home .thumbnails img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .album-home .thumbnails img:hover {
+            transform: scale(1.1);
+        }
+
+        /* 图片移动容器 */
+        .gallery-container {
+            position: relative;
+            width: 80vw;
+            height: 40vh;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            display: none; /* 默认隐藏 */
+            margin: 0 auto;
+        }
+
+        /* 图片轨道 */
+        .image-track {
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            gap: 4vw;
+            padding: 0 50%; /* 添加左右内边距 */
+            animation: slide 30s linear infinite; /* 修复动画持续时间 */
+        }
+
+        /* 单张图片样式 */
+        .image-item {
+            width: 30vw;
+            height: 20vh;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer; /* 添加鼠标指针样式 */
+        }
+
+        /* 控制按钮样式 */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none; /* 默认隐藏 */
+            gap: 10px;
+            z-index: 100;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center; /* 确保所有按钮垂直对齐 */
+        }
+        .controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 返回按钮样式 */
+        .back-button {
+            position: static; /* 移除固定定位 */
+            top: auto;
+            left: auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+
+        /* 动画定义 */
+        @keyframes slide {
+            0% { transform: translateY(-50%) translateX(0); }
+            100% { transform: translateY(-50%) translateX(calc(-100% + 100vw)); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes moveStars {
+            100% { transform: translate(-100vw, -100vh); }
+        }
+
+        /* 悬停效果 */
+        .image-item:hover {
+            transform: scale(1.05) rotate(2deg);
+            z-index: 10;
+        }
+
+        /* 放大图片样式 */
+        .image-item.enlarged {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.5); /* 改为放大50% */
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .album-home h1 {
+                font-size: 2em;
+            }
+            .album-home .thumbnails img {
+                width: 100px;
+                height: 75px;
+            }
+            .gallery-container {
+                width: 90vw;
+                height: 30vh;
+            }
+            .image-item {
+                width: 20vw;
+                height: 15vh;
+            }
+            .controls {
+                flex-direction: row; /* 保持水平排列 */
+                padding: 0 10px;
+            }
+            .controls button {
+                padding: 5px 10px;
+                font-size: 0.9rem;
+            }
+            .back-button {
+                padding: 5px 10px;
+            }
+        }
+
+        /* 进一步适配更小屏幕 */
+        @media (max-width: 480px) {
+            .album-home h1 {
+                font-size: 1.5em;
+            }
+            .album-home .thumbnails img {
+                width: 80px;
+                height: 60px;
+            }
+            .gallery-container {
+                width: 95vw;
+                height: 25vh;
+            }
+            .image-item {
+                width: 15vw;
+                height: 10vh;
+            }
+            .controls button {
+                padding: 3px 5px;
+                font-size: 0.8em;
+            }
+            .back-button {
+                padding: 3px 5px;
+                font-size: 0.8em;
+            }
+        }
+ 
+        /* 基础响应式设置 */
+        html {
+            font-size: 16px; /* 基准字体大小 */
+        }
+
+        @media screen and (max-width: 1200px) {
+            html {
+                font-size: 15px;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        /* 平板设备适配 */
+        @media screen and (max-width: 768px) {
+            html {
+                font-size: 13px;
+            }
+            
+            .album-home {
+                width: 90%;
+                top: 5%;
+            }
+            
+            .album-home h1 {
+                font-size: 2rem;
+            }
+            
+            .album-home .thumbnails {
+                gap: 10px;
+            }
+            
+            .album-home .thumbnails img {
+                width: calc(50% - 10px); /* 每行两张图片 */
+                height: auto;
+                aspect-ratio: 3/2;
+            }
+            
+            .gallery-container {
+                width: 95vw;
+                height: 50vh;
+            }
+            
+            .image-item {
+                width: 40vw;
+                height: 25vh;
+            }
+        }
+
+        /* 手机设备适配 */
+        @media screen and (max-width: 480px) {
+            html {
+                font-size: 12px;
+            }
+            
+            .album-home h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+            
+            .album-home .thumbnails {
+                gap: 5px;
+            }
+            
+            .album-home .thumbnails img {
+                width: calc(100% - 10px); /* 每行一张图片 */
+                height: auto;
+                aspect-ratio: 3/2;
+            }
+            
+            .controls {
+                bottom: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0 10px;
+            }
+            
+            .controls button {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+                margin: 2px;
+            }
+            
+            .back-button {
+                top: 10px;
+                left: 10px;
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* 小型手机设备适配 */
+        @media screen and (max-width: 320px) {
+            html {
+                font-size: 11px;
+            }
+            
+            .controls button {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+
+        /* 触摸设备优化 */
+        @media (hover: none) {
+            .image-item:hover {
+                transform: none; /* 移除悬停效果 */
+            }
+            
+            .controls button {
+                padding: 0.8rem 1.2rem; /* 增大触摸区域 */
+            }
+        }
+
+        /* 横屏模式适配 */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .gallery-container {
+                height: 70vh;
+            }
+            
+            .album-home {
+                top: 5%;
+            }
+            
+            .controls {
+                bottom: 5px;
+            }
+        }
+
+        /* 音乐播放器容器样式 */
+        .music-player {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px;
+            border-radius: 5px;
+            display: none;
+            z-index: 2;
+        }
+
+        .image-item-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-item-container:hover .music-player {
+            display: block;
+        }
+
+        .music-player audio {
+            width: 200px;
+            height: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .music-player audio {
+                width: 150px;
+                height: 25px;
+            }
+        }
+
+        /* 修改桌面端的基础布局 */
+        @media screen and (min-width: 1000px) {
+            .album-home {
+                width: 80%;
+                max-width: 1000px;
+                top: 15%;
+            }
+            
+            .album-home h1 {
+                font-size: 4rem;
+                margin-bottom: 3rem;
+            }
+            
+            .album-home .thumbnails {
+                gap: 30px;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            
+            .album-home .thumbnails img {
+                width: 200px;
+                height: 150px;
+                transition: transform 0.3s ease;
+            }
+            
+            .gallery-container {
+                width: 90vw;
+                max-width: 1400px;
+                height: 60vh;
+                margin: 0 auto;
+            }
+            
+            .image-track {
+                gap: 40px;
+            }
+            
+            .image-item {
+                width: 400px;
+                height: 300px;
+            }
+            
+            .controls {
+                bottom: 40px;
+                gap: 20px;
+            }
+            
+            .controls button {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+                transition: all 0.3s ease;
+            }
+            
+            .controls button:hover {
+                background: rgba(255,255,255,0.2);
+                transform: translateY(-2px);
+            }
+            
+            .music-player {
+                bottom: 20px;
+            }
+            
+            .music-player audio {
+                width: 300px;
+                height: 40px;
+            }
+        }
+
+        /* 大屏幕显示器适配 */
+        @media screen and (min-width: 1600px) {
+            .album-home {
+                max-width: 1400px;
+            }
+            
+            .album-home .thumbnails img {
+                width: 250px;
+                height: 180px;
+            }
+            
+            .gallery-container {
+                max-width: 1600px;
+                height: 70vh;
+            }
+            
+            .image-item {
+                width: 500px;
+                height: 350px;
+            }
+        }
+
+        /* 优化图片悬停效果 */
+        @media screen and (min-width: 1200px) {
+            .album-home .thumbnails img:hover {
+                transform: scale(1.15);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+                z-index: 2;
+            }
+            
+            .image-item:hover {
+                transform: scale(1.1) rotate(3deg);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            }
+        }
+
+        /* 优化音乐播放器在桌面端的显示 */
+        @media screen and (min-width: 1000px) {
+            .music-player {
+                position: absolute;
+                bottom: -60px; /* 调整位置，使其位于图片下方 */
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.6);
+                padding: 10px;
+                border-radius: 10px;
+                transition: opacity 0.3s ease;
+                opacity: 0;
+            }
+            
+            .image-item-container {
+                padding-bottom: 60px; /* 为音乐播放器预留空间 */
+                margin-bottom: 20px; /* 增加容器间距 */
+            }
+            
+            .image-item-container:hover .music-player {
+                opacity: 1;
+            }
+            
+            .music-player audio {
+                width: 300px;
+                height: 40px;
+            }
+        }
+
+        /* 大屏幕显示器额外优化 */
+        @media screen and (min-width: 1600px) {
+            .music-player {
+                bottom: -70px; /* 大屏幕下调整位置 */
+            }
+            
+            .image-item-container {
+                padding-bottom: 70px;
+            }
+            
+            .music-player audio {
+                width: 350px;
+                height: 45px;
+            }
+        }
+
+        /* 添加到现有的style标签中 */
+        video {
+            background: #000;
+            filter: brightness(1.5) contrast(1.5); /* 调整亮度和对比度 */
+            max-width: 100%;
+            height: auto;
+            box-shadow: none; /* 移除阴影效果 */
+        }
+
+        video::-webkit-media-controls {
+            background-color: rgba(0, 0, 0, 0.3); /* 降低控制器背景透明度 */
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        video::-webkit-media-controls-panel {
+            color: white;
+            background-color: rgba(0, 0, 0, 0.2); /* 添加控制面板背景 */
+        }
+
+        @media (max-width: 768px) {
+            video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .overlay-music-player {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 1002; /* 确保在遮罩层上方 */
+        }
+
+        .overlay-music-player audio {
+            width: 300px;
+            height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .overlay-music-player audio {
+                width: 200px;
+                height: 35px;
+            }
+        }
+
+        /* 视频容器样式优化 */
+        .video-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: none; /* 移除容器阴影 */
+            backdrop-filter: blur(3px);
+        }
+
+        /* 添加触摸设备优化样式 */
+        @media (hover: none) and (pointer: coarse) {
+            .album-home {
+                padding: 20px;
+            }
+            
+            .album-home h1 {
+                font-size: calc(2rem + 2vw);
+                margin-bottom: 1.5rem;
+            }
+            
+            .album-home .thumbnails {
+                gap: 15px;
+                padding: 10px;
+            }
+            
+            .album-home .thumbnails img {
+                width: calc(50% - 15px);
+                height: auto;
+                aspect-ratio: 3/2;
+                transition: transform 0.2s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            /* 触摸时的反馈效果 */
+            .album-home .thumbnails img:active {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+            
+            /* 移除悬停效果 */
+            .album-home .thumbnails img:hover {
+                transform: none;
+            }
+        }
+
+        /* 针对不同屏幕大小优化触摸体验 */
+        @media (hover: none) and (max-width: 480px) {
+            .album-home .thumbnails img {
+                width: calc(100% - 20px);
+                margin: 10px;
+            }
+        }
+
+        @media (hover: none) and (orientation: landscape) {
+            .album-home {
+                top: 5%;
+            }
+            
+            .album-home .thumbnails {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+                max-height: 70vh;
+                overflow-y: auto;
+                padding: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .album-home .thumbnails::-webkit-scrollbar {
+                width: 5px;
+            }
+            
+            .album-home .thumbnails::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.2);
+                border-radius: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="snowflakes-container"></div>
+    <!-- 星空背景 -->
+    <div class="stars"></div>
+    
+    <!-- 雪花容器 -->
+    <div class="snowflakes"></div>
+
+    <!-- 相册首页 -->
+    <div class="album-home">
+        <h1>欢迎来到相册</h1>
+        <div class="thumbnails">
+            <img src="img/image (1).jpg" onclick="showGallery(1)">
+            <img src="img/image (2).jpg" onclick="showGallery(2)">
+            <img src="img/image (3).jpg" onclick="showGallery(3)">
+            <img src="img/image (4).jpg" onclick="showGallery(4)">
+        </div>
+    </div>
+
+    <!-- 图片移动容器 -->
+    <div class="gallery-container" id="gallery-1">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item" data-video="videos/video3.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item" data-video="videos/video4.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-2">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (5).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (6).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (7).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (8).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-3">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (9).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (10).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (11).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (12).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-4">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (13).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (14).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (15).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (16).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 控制按钮组 -->
+    <div class="controls">
+        <button onclick="toggleAnimation()">暂停/播放</button>
+        <button onclick="speedUp()">加速</button>
+        <button onclick="slowDown()">减速</button>
+        <button onclick="toggleMusic()">音乐开关</button>
+        <button class="back-button" onclick="goBack()">返回相册</button>
+    </div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgm" loop>
+        <source src="http://music.163.com/song/media/outer/url?id=1821888278.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const track = document.querySelector('.image-track');
+        let isPlaying = true;
+        let speed = 30;
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            track.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        }
+
+        function speedUp() {
+            speed = Math.max(5, speed - 5);
+            track.style.animationDuration = `${speed}s`;
+        }
+
+        function slowDown() {
+            speed = Math.min(60, speed + 5);
+            track.style.animationDuration = `${speed}s`;
+        }
+
+        // 动态创建更多星星
+        function createStars() {
+            const stars = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 3}px;
+                    height: ${Math.random() * 3}px;
+                    background: rgba(255,255,255,${Math.random()});
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    animation: moveStars ${Math.random() * 80 + 30}s linear infinite;
+                `;
+                stars.appendChild(star);
+            }
+        }
+        createStars();
+
+        // 动态创建雪花
+        function createSnowflakes() {
+            const snowflakesContainer = document.querySelector('.snowflakes');
+            const snowflakeChars = ['❅'];
+            
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2-5秒
+                snowflake.style.opacity = Math.random();
+                snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+                
+                snowflakesContainer.appendChild(snowflake);
+                
+                // 当动画结束后移除雪花
+                snowflake.addEventListener('animationend', () => {
+                    snowflake.remove();
+                });
+            }
+            
+            // 每200ms创建一个新雪花
+            setInterval(createSnowflake, 200);
+        }
+        
+        // 页面加载完成后启动雪花效果
+        window.addEventListener('load', createSnowflakes);
+
+        // 音乐开关功能
+        const bgm = document.getElementById('bgm');
+        let isMusicPlaying = true; // 默认设置为true
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgm.pause();
+            } else {
+                bgm.play();
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // 修改页面加载时的音乐播放
+        window.addEventListener('load', () => {
+            // 尝试自动播放背景音乐
+            bgm.play().then(() => {
+                console.log('背景音乐开始播放');
+                isMusicPlaying = true;
+            }).catch(error => {
+                console.log('自动播放被阻止:', error);
+                isMusicPlaying = false;
+            });
+        });
+
+        // 修改点击图片放大功能的代码部分:
+        document.querySelectorAll('.image-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                event.stopPropagation();
+                
+                // 立即暂停背景音乐
+                const bgm = document.getElementById('bgm');
+                if (bgm && !bgm.paused) {
+                    bgm.pause();
+                }
+                isMusicPlaying = false; // 设置音乐播放状态为关闭
+                
+                // 创建遮罩层
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                `;
+
+                // 创建关闭按钮
+                const closeButton = document.createElement('button');
+                closeButton.textContent = '×';
+                closeButton.style.cssText = `
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    width: 40px;
+                    height: 40px;
+                    border: none;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.2);
+                    color: white;
+                    font-size: 24px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: background 0.3s;
+                    z-index: 1001;
+                `;
+                
+                // 创建内容容器
+                const contentContainer = document.createElement('div');
+                contentContainer.style.cssText = `
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    width: 90vw;
+                    max-width: 1600px;
+                    justify-content: center;
+                    align-items: center;
+                    margin-bottom: 20px;
+                `;
+
+                // 创建媒体容器（用于放置图片和视频）
+                const mediaContainer = document.createElement('div');
+                mediaContainer.style.cssText = `
+                    display: flex;
+                    flex-direction: row;
+                    gap: 20px;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                `;
+
+                // 创建图片容器
+                const imageContainer = document.createElement('div');
+                imageContainer.style.cssText = `
+                    flex: 1;
+                    max-width: 45%;
+                `;
+
+                // 创建放大后的图片
+                const enlargedImg = document.createElement('img');
+                enlargedImg.src = item.src;
+                enlargedImg.style.cssText = `
+                    width: 100%;
+                    max-height: 80vh;
+                    object-fit: contain;
+                    border-radius: 10px;
+                    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+                    transform: scale(0.9);
+                    transition: transform 0.3s;
+                `;
+                imageContainer.appendChild(enlargedImg);
+
+                // 在创建视频元素的部分修改代码：
+                if (item.dataset.video) {
+                    const videoContainer = document.createElement('div');
+                    videoContainer.className = 'video-container';
+                    videoContainer.style.cssText = `
+                        flex: 2;
+                        max-width: 60%;
+                        background: rgba(0, 0, 0, 0.6);
+                        padding: 10px;
+                        border-radius: 15px;
+                        box-shadow: 0 0 30px rgba(0,0,0,0.3);
+                        backdrop-filter: blur(5px);
+                    `;
+
+                    const video = document.createElement('video');
+                    video.style.cssText = `
+                        width: 100%;
+                        max-height: 80vh;
+                        object-fit: contain;
+                        border-radius: 10px;
+                        filter: brightness(1.2);
+                        transform: scale(0.95);
+                        transition: transform 0.3s;
+                        box-shadow: 0 0 30px rgba(255,255,255,0.1);
+                    `;
+                    video.controls = true;
+                    video.src = item.dataset.video;
+                    video.playsInline = true;
+                    video.autoplay = true;
+                    video.muted = true;
+                    
+                    // 视频加载完成后自动播放并取消静音
+                    video.addEventListener('loadeddata', () => {
+                        video.play().then(() => {
+                            video.muted = false;
+                            // 添加渐变效果
+                            video.style.transition = 'filter 0.5s ease';
+                            video.style.filter = 'brightness(1.2)';
+                        }).catch(error => {
+                            console.log('视频自动播放失败:', error);
+                        });
+                    });
+
+                    // 修改图片容器样式
+                    imageContainer.style.cssText = `
+                        flex: 1;
+                        max-width: 35%; // 减小图片容器的最大宽度
+                        margin-left: 20px; // 添加左边距
+                    `;
+
+                    // 调整添加顺序 - 先添加视频再添加图片
+                    videoContainer.appendChild(video);
+                    mediaContainer.appendChild(videoContainer);
+                    mediaContainer.appendChild(imageContainer);
+                } else {
+                    // 如果没有视频，只显示图片
+                    imageContainer.style.maxWidth = '90%';
+                    mediaContainer.appendChild(imageContainer);
+                }
+
+                // 添加音乐播放器
+                const musicPlayerContainer = document.createElement('div');
+                musicPlayerContainer.className = 'overlay-music-player';
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                const source = document.createElement('source');
+                
+                // 获取原始音乐播放器的音源
+                const originalAudio = item.closest('.image-item-container').querySelector('audio source');
+                if (originalAudio) {
+                    source.src = originalAudio.src;
+                    source.type = originalAudio.type;
+                    audio.appendChild(source);
+                    
+                    audio.addEventListener('play', () => {
+                        // 只暂停视频,不重置进度
+                        const overlayVideo = overlay.querySelector('video');
+                        if (overlayVideo && !overlayVideo.paused) {
+                            overlayVideo.pause();
+                        }
+                        
+                        // 暂停其他音频
+                        document.querySelectorAll('.music-player audio, .overlay-music-player audio').forEach(otherAudio => {
+                            if (otherAudio !== audio && !otherAudio.paused) {
+                                otherAudio.pause();
+                            }
+                        });
+                        
+                        // 暂停背景音乐
+                        if (bgm && !bgm.paused) {
+                            bgm.pause();
+                        }
+                    });
+                    
+                    musicPlayerContainer.appendChild(audio);
+                }
+
+                // 将所有元素添加到内容容器
+                contentContainer.appendChild(mediaContainer);
+                if (originalAudio) {
+                    contentContainer.appendChild(musicPlayerContainer);
+                }
+
+                // 添加到页面
+                overlay.appendChild(closeButton);
+                overlay.appendChild(contentContainer);
+                document.body.appendChild(overlay);
+
+                // 关闭功能
+                const closeOverlay = () => {
+                    const video = overlay.querySelector('video');
+                    const overlayAudio = overlay.querySelector('audio');
+                    
+                    if (video) {
+                        video.pause();
+                        video.currentTime = 0;
+                    }
+                    
+                    if (overlayAudio) {
+                        overlayAudio.pause();
+                    }
+                    
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(overlay);
+                        // 恢复轨道动画
+                        const track = document.querySelector('.image-track');
+                        track.style.animationPlayState = 'running';
+                        // 不自动恢复背景音乐
+                    }, 300);
+                };
+
+                // 点击关闭按钮关闭
+                closeButton.addEventListener('click', closeOverlay);
+
+                // 点击遮罩层关闭
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        closeOverlay();
+                    }
+                });
+
+                // ESC键关闭
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closeOverlay();
+                    }
+                });
+            });
+        });
+
+        // 显示相册功能
+        function showGallery(albumNumber) {
+            // 隐藏首页
+            document.querySelector('.album-home').style.display = 'none';
+            
+            // 隐藏所有相册
+            document.querySelectorAll('.gallery-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // 显示选中的相册
+            document.getElementById(`gallery-${albumNumber}`).style.display = 'block';
+            
+            // 显示控制按钮和返回按钮
+            document.querySelector('.controls').style.display = 'flex';
+            document.querySelector('.back-button').style.display = 'block';
+            
+            // 重置动画
+            const track = document.querySelector('.image-track');
+            track.style.animation = 'none';
+            track.offsetHeight; // 触发重排
+            track.style.animation = 'slide 30s linear infinite';
+            
+            // 自动播放背景音乐
+            const bgm = document.getElementById('bgm');
+            if (bgm) {
+                bgm.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(error => {
+                    console.log('背景音乐自动播放失败:', error);
+                    isMusicPlaying = false;
+                });
+            }
+        }
+
+        // 修改返回相册首页功能
+        function goBack() {
+            // 显示首页
+            document.querySelector('.album-home').style.display = 'block';
+            
+            // 隐藏所有相册
+            document.querySelectorAll('.gallery-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // 隐藏控制按钮和返回按钮
+            document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.back-button').style.display = 'none';
+            
+            // 返回首页时恢复背景音乐播放
+            if (isMusicPlaying) {
+                bgm.play().catch(error => {
+                    console.log('背景音乐恢复播放失败:', error);
+                });
+            }
+        }
+
+        // 添加触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 50) { // 最小滑动距离
+                if (swipeDistance > 0) {
+                    slowDown(); // 向右滑动减速
+                } else {
+                    speedUp(); // 向左滑动加速
+                }
+            }
+        }
+
+        // 优化图片加载
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            images.forEach(img => {
+                img.dataset.src = img.src;
+                img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // 占位图
+                imageObserver.observe(img);
+            });
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', () => {
+            lazyLoadImages();
+            
+            // 检测设备类型
+            if ('ontouchstart' in window) {
+                document.body.classList.add('touch-device');
+            }
+            
+            // 处理屏幕方向变化
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    // 重新调整布局
+                    document.querySelectorAll('.gallery-container').forEach(container => {
+                        if (container.style.display === 'block') {
+                            container.style.display = 'none';
+                            container.offsetHeight; // 强制重排
+                            container.style.display = 'block';
+                        }
+                    });
+                }, 100);
+            });
+        });
+
+        // 找到音乐播放控制部分,修改为:
+        document.querySelectorAll('.music-player audio').forEach(audio => {
+            const container = audio.closest('.image-item-container');
+            
+            // 当鼠标进入图片容器时自动播放音乐
+            container.addEventListener('mouseenter', () => {
+                // 先暂停所有其他音频
+                document.querySelectorAll('.music-player audio').forEach(otherAudio => {
+                    if (otherAudio !== audio) {
+                        otherAudio.pause();
+                    }
+                });
+                // 暂停背景音乐
+                const bgm = document.getElementById('bgm');
+                if(bgm) {
+                    bgm.pause();
+                }
+                // 播放当前音频
+                audio.play().catch(error => {
+                    console.log('自动播放被阻止:', error);
+                });
+            });
+
+            // 当鼠标离开图片容器时暂停音乐
+            container.addEventListener('mouseleave', () => {
+                audio.pause();
+                // 恢复背景音乐(如果之前是开启状态)
+                const bgm = document.getElementById('bgm');
+                if(bgm && isMusicPlaying) {
+                    bgm.play();
+                }
+            });
+            
+            // 监听音频播放结束
+            audio.addEventListener('ended', () => {
+                // 恢复背景音乐(如果之前是开启状态)
+                const bgm = document.getElementById('bgm');
+                if(bgm && isMusicPlaying) {
+                    bgm.play();
+                }
+            });
+
+            // 添加音频播放开始事件监听
+            audio.addEventListener('play', () => {
+                // 暂停所有视频播放
+                document.querySelectorAll('video').forEach(video => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            });
+        });
+
+        // 同时也需要在视频播放时暂停音乐
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('play', () => {
+                // 暂停所有音频播放，包括背景音乐和音乐播放器中的音频
+                document.querySelectorAll('.music-player audio, .overlay-music-player audio, #bgm').forEach(audio => {
+                    audio.pause();
+                });
+            });
+            
+            video.addEventListener('pause', () => {
+                // 如果背景音乐之前是播放状态，则恢复播放
+                const bgm = document.getElementById('bgm');
+                if (bgm && isMusicPlaying) {
+                    bgm.play();
+                }
+            });
+        });
+
+        // 修改音频播放事件监听器代码
+        document.querySelectorAll('.music-player audio, .overlay-music-player audio').forEach(audio => {
+            audio.addEventListener('play', () => {
+                // 只暂停视频,不重置进度
+                document.querySelectorAll('video').forEach(video => {
+                    if (!video.paused) {
+                        video.pause();
+                    }
+                });
+                
+                // 暂停其他音频
+                document.querySelectorAll('.music-player audio, .overlay-music-player audio').forEach(otherAudio => {
+                    if (otherAudio !== audio && !otherAudio.paused) {
+                        otherAudio.pause(); 
+                    }
+                });
+                
+                // 暂停背景音乐
+                const bgm = document.getElementById('bgm');
+                if (bgm && !bgm.paused) {
+                    bgm.pause();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
