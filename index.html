@@ -11,7 +11,6 @@
             min-height: 100vh;
             background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
             overflow-y: auto; /* 允许页面纵向滚动 */
-            position: relative;
             padding: 0; /* 移除内边距 */
         }
 
@@ -246,6 +245,23 @@
             .back-button {
                 padding: 5px 10px;
             }
+            /* 修改弹出层中的媒体容器布局 */
+            .mediaContainer {
+                flex-direction: column !important; /* 强制改为垂直布局 */
+                gap: 10px !important;
+            }
+
+            /* 修改图片和视频容器的宽度 */
+            [class*="Container"] > div {
+                width: 100% !important; /* 强制占满容器宽度 */
+            }
+
+            /* 调整视频播放器大小 */
+            video {
+                width: 100% !important;
+                max-height: 40vh !important; /* 控制视频最大高度 */
+                object-fit: contain !important;
+            }
         }
 
         /* 进一步适配更小屏幕 */
@@ -272,6 +288,9 @@
             .back-button {
                 padding: 3px 5px;
                 font-size: 0.8em;
+            }
+            video {
+                max-height: 35vh !important;
             }
         }
  
@@ -704,6 +723,14 @@
                     </audio>
                 </div>
             </div>
+            <div class="image-item-container">
+                <img src="img/image (5).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -929,6 +956,117 @@
         </div>
     </div>
 
+    <div class="gallery-container" id="gallery-8">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-9">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery-10">
+        <div class="image-track">
+            <div class="image-item-container">
+                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (3).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+            <div class="image-item-container">
+                <img src="img/image (4).jpg" class="image-item">
+                <div class="music-player">
+                    <audio controls>
+                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 控制按钮组 -->
     <div class="controls">
         <button onclick="toggleAnimation()">暂停/播放</button>
@@ -1114,12 +1252,12 @@
                 mediaContainer.style.cssText = `
                     position: relative;
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: ${window.innerWidth <= 768 ? 'column' : 'row'};
                     justify-content: center;
                     align-items: center;
                     width: 100%;
                     height: 100%;
-                    gap: 20px;
+                    gap: ${window.innerWidth <= 768 ? '10px' : '20px'};
                 `;
 
                 // 创建图片容器
@@ -1128,8 +1266,8 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: ${item.dataset.video ? '45%' : '90%'};
-                    height: 100%;
+                    width: ${window.innerWidth <= 768 ? '100%' : (item.dataset.video ? '45%' : '90%')};
+                    height: ${window.innerWidth <= 768 ? 'auto' : '100%'};
                 `;
 
                 // 创建放大后的图片
@@ -1151,14 +1289,14 @@
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        width: 55%;
-                        height: 100%;
+                        width: ${window.innerWidth <= 768 ? '100%' : '55%'};
+                        height: ${window.innerWidth <= 768 ? 'auto' : '100%'};
                     `;
 
                     const video = document.createElement('video');
                     video.style.cssText = `
-                        max-width: 100%;
-                        max-height: 80vh;
+                        width: 100%;
+                        max-height: ${window.innerWidth <= 768 ? '40vh' : '80vh'};
                         object-fit: contain;
                         border-radius: 10px;
                         filter: brightness(1.2);
@@ -1336,6 +1474,24 @@
                 }).catch(error => {
                     console.log('背景音乐自动播放失败:', error);
                     isMusicPlaying = false;
+                });
+            }
+
+            // 重置并开始动画
+            const trackElement = document.querySelector(`#gallery-${albumNumber} .image-track`);
+            if (trackElement) {
+                trackElement.style.animation = 'none';
+                trackElement.offsetHeight; // 触发重排
+                trackElement.style.animation = `slide ${speed}s linear infinite`;
+                trackElement.style.animationPlayState = isPlaying ? 'running' : 'paused';
+                
+                // 确保图片容器位置正确
+                const container = document.getElementById(`gallery-${albumNumber}`);
+                container.style.display = 'block';
+                
+                // 强制重新计算布局
+                requestAnimationFrame(() => {
+                    container.style.opacity = '1';
                 });
             }
         }
