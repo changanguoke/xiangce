@@ -703,7 +703,7 @@
                 <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
-                        <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
+                        <source src="http://music.163.com/song/media/outer/url?id=1867964889.mp3" type="audio/mpeg">
                     </audio>
                 </div>
             </div>
@@ -1190,12 +1190,11 @@
             item.addEventListener('click', (event) => {
                 event.stopPropagation();
                 
-                // 点击图片时暂停背景音乐
-                const bgm = document.getElementById('bgm');
-                if (bgm && !bgm.paused) {
-                    bgm.pause();
-                }
-                
+                // 暂停所有音频
+                document.querySelectorAll('.music-player audio, .overlay-music-player audio, #bgm').forEach(audio => {
+                    audio.pause();
+                });
+
                 // 创建遮罩层
                 const overlay = document.createElement('div');
                 overlay.style.cssText = `
