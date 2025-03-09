@@ -446,6 +446,7 @@
             justify-content: center;
             align-items: center;
             margin: 0 2vw;
+            padding-bottom: 70px;
         }
 
         .image-item-container:hover .music-player {
@@ -453,8 +454,8 @@
         }
 
         .music-player audio {
-            width: 200px;
-            height: 30px;
+            width: 350px;
+            height: 45px;
         }
 
         @media (max-width: 768px) {
@@ -582,7 +583,7 @@
             }
             
             .image-item-container {
-                padding-bottom: 60px; /* 为音乐播放器预留空间 */
+                padding-bottom: 70px; /* 为音乐播放器预留空间 */
                 margin-bottom: 20px; /* 增加容器间距 */
             }
             
@@ -613,13 +614,16 @@
         }
 
         /* 添加到现有的style标签中 */
-        video {
-            background: #000;
-            border-radius: 10px;
-            transform: scale(0.95);
-            transition: transform 0.3s;
-            box-shadow: none; /* 取消阴影效果 */
-        }
+video {
+    background: #000;
+    border-radius: 10px;
+    transform: scale(0.95);
+    transition: transform 0.3s;
+    box-shadow: none; /* 取消阴影效果 */
+    filter: brightness(1.2); /* 提升亮度 */
+    z-index: 1000 !important; /* 确保视频在最上层 */
+    position: relative !important; /* 确保视频相对定位 */
+}
 
         video::-webkit-media-controls {
             background-color: rgba(0, 0, 0, 0.5);
@@ -660,6 +664,34 @@
                 height: 35px;
             }
         }
+
+        video {
+    background: #000;
+    border-radius: 10px;
+    transform: scale(0.95);
+    transition: transform 0.3s;
+    box-shadow: none; /* 取消阴影效果 */
+    filter: brightness(1.2); /* 提升亮度 */
+    z-index: 1000 !important; /* 确保视频在最上层 */
+    position: relative !important; /* 确保视频相对定位 */
+}
+
+video::-webkit-media-controls {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+video::-webkit-media-controls-panel {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    video {
+        width: 100%;
+        height: auto;
+    }
+}
     </style>
     <title>相册</title>
 </head>
@@ -708,7 +740,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (3).jpg" class="image-item" data-video="videos/video3.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -716,7 +748,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (4).jpg" class="image-item" data-video="videos/video4.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -737,7 +769,7 @@
     <div class="gallery-container" id="gallery-2">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item">
+                <img src="img/image (11).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -745,7 +777,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item">
+                <img src="img/image (12).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -753,7 +785,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (13).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -761,7 +793,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (14).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -774,7 +806,7 @@
     <div class="gallery-container" id="gallery-3">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item">
+                <img src="img/image (15).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -782,7 +814,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item">
+                <img src="img/image (6).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -790,7 +822,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (17).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -798,7 +830,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (18).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -811,7 +843,7 @@
     <div class="gallery-container" id="gallery-4">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item">
+                <img src="img/image (19).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -819,7 +851,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item">
+                <img src="img/image (20).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -827,7 +859,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (21).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -835,7 +867,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (22).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -848,7 +880,7 @@
     <div class="gallery-container" id="gallery-5">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <img src="img/image (23).jpg" class="image-item" data-video="videos/video1.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
@@ -856,7 +888,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <img src="img/image (24).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
@@ -864,7 +896,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (25).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -872,7 +904,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (26).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -885,7 +917,7 @@
     <div class="gallery-container" id="gallery-6">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item">
+                <img src="img/image (27).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -893,7 +925,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item">
+                <img src="img/image (28).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -901,7 +933,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (29).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -909,7 +941,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (30).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -922,7 +954,7 @@
     <div class="gallery-container" id="gallery-7">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item">
+                <img src="img/image (31).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -930,7 +962,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item">
+                <img src="img/image (32).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -938,7 +970,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (33).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -946,7 +978,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (34).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -959,7 +991,7 @@
     <div class="gallery-container" id="gallery-8">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <img src="img/image (35).jpg" class="image-item" data-video="videos/video1.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
@@ -967,7 +999,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <img src="img/image (36).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
@@ -975,7 +1007,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (37).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -983,7 +1015,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (38).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -996,7 +1028,7 @@
     <div class="gallery-container" id="gallery-9">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <img src="img/image (39).jpg" class="image-item" data-video="videos/video1.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
@@ -1004,7 +1036,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <img src="img/image (40).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
@@ -1012,7 +1044,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (40).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1020,7 +1052,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (41).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1033,7 +1065,7 @@
     <div class="gallery-container" id="gallery-10">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (1).jpg" class="image-item" data-video="videos/video1.mp4">
+                <img src="img/image (42).jpg" class="image-item" data-video="videos/video1.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
@@ -1041,7 +1073,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (2).jpg" class="image-item" data-video="videos/video2.mp4">
+                <img src="img/image (43).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
@@ -1049,7 +1081,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (3).jpg" class="image-item">
+                <img src="img/image (44).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1057,7 +1089,7 @@
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (4).jpg" class="image-item">
+                <img src="img/image (45).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
