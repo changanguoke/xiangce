@@ -258,8 +258,8 @@
 
             /* 调整视频播放器大小 */
             video {
-                width: 100% !important;
-                max-height: 40vh !important; /* 控制视频最大高度 */
+                width: 50% !important;
+                max-height: 30vh !important; /* 控制视频最大高度 */
                 object-fit: contain !important;
             }
         }
@@ -615,65 +615,16 @@
 
         /* 添加到现有的style标签中 */
 video {
-    background: #000;
+    background: transparent !important;
     border-radius: 10px;
     transform: scale(0.95);
     transition: transform 0.3s;
-    box-shadow: none; /* 取消阴影效果 */
-    filter: brightness(1.2); /* 提升亮度 */
-    z-index: 1000 !important; /* 确保视频在最上层 */
-    position: relative !important; /* 确保视频相对定位 */
-}
-
-        video::-webkit-media-controls {
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            padding: 5px;
-        }
-
-        video::-webkit-media-controls-panel {
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            video {
-                width: 100%;
-                height: auto;
-            }
-        }
-
-        .overlay-music-player {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px;
-            border-radius: 10px;
-            z-index: 1002; /* 确保在遮罩层上方 */
-        }
-
-        .overlay-music-player audio {
-            width: 300px;
-            height: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .overlay-music-player audio {
-                width: 200px;
-                height: 35px;
-            }
-        }
-
-        video {
-    background: #000;
-    border-radius: 10px;
-    transform: scale(0.95);
-    transition: transform 0.3s;
-    box-shadow: none; /* 取消阴影效果 */
-    filter: brightness(1.2); /* 提升亮度 */
-    z-index: 1000 !important; /* 确保视频在最上层 */
-    position: relative !important; /* 确保视频相对定位 */
+    box-shadow: none !important;
+    filter: brightness(2.5) !important; /* 提高亮度到1.8 */
+    z-index: 1000 !important;
+    position: relative !important;
+    max-width: 100%;
+    height: auto;
 }
 
 video::-webkit-media-controls {
@@ -686,12 +637,16 @@ video::-webkit-media-controls-panel {
     color: white;
 }
 
+/* 媒体查询中的视频样式 */
 @media (max-width: 768px) {
     video {
         width: 100%;
         height: auto;
+        max-height: 40vh;
+        object-fit: contain;
     }
 }
+
     </style>
     <title>相册</title>
 </head>
@@ -1044,7 +999,7 @@ video::-webkit-media-controls-panel {
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (40).jpg" class="image-item">
+                <img src="img/image (41).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1052,7 +1007,7 @@ video::-webkit-media-controls-panel {
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (41).jpg" class="image-item">
+                <img src="img/image (42).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1065,7 +1020,7 @@ video::-webkit-media-controls-panel {
     <div class="gallery-container" id="gallery-10">
         <div class="image-track">
             <div class="image-item-container">
-                <img src="img/image (42).jpg" class="image-item" data-video="videos/video1.mp4">
+                <img src="img/image (43).jpg" class="image-item" data-video="videos/video1.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=2676332640.mp3" type="audio/mpeg">
@@ -1073,7 +1028,7 @@ video::-webkit-media-controls-panel {
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (43).jpg" class="image-item" data-video="videos/video2.mp4">
+                <img src="img/image (44).jpg" class="image-item" data-video="videos/video2.mp4">
                 <div class="music-player">
                     <audio controls>
                         <source src="https://sharefs.tx.kugou.com/202503070921/965ff45d24a6e60827c2dc6aab085613/v3/b8cf516ee37d2f7410f86e7b83fbfb65/yp/full/ap1000_us0_pi409_s1579596470.mp3" type="audio/mpeg">
@@ -1081,7 +1036,7 @@ video::-webkit-media-controls-panel {
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (44).jpg" class="image-item">
+                <img src="img/image (45).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
@@ -1089,7 +1044,7 @@ video::-webkit-media-controls-panel {
                 </div>
             </div>
             <div class="image-item-container">
-                <img src="img/image (45).jpg" class="image-item">
+                <img src="img/image (46).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
                         <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
