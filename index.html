@@ -258,9 +258,10 @@
 
             /* 调整视频播放器大小 */
             video {
-                width: 50% !important;
-                max-height: 30vh !important; /* 控制视频最大高度 */
-                object-fit: contain !important;
+                width: 100%;
+                height: auto;
+                max-height: 40vh;
+                object-fit: contain;
             }
         }
 
@@ -644,6 +645,49 @@ video::-webkit-media-controls-panel {
         height: auto;
         max-height: 40vh;
         object-fit: contain;
+    }
+}
+
+/* 在style标签中修改或添加以下CSS代码 */
+
+/* 调整视频播放器大小 */
+video {
+    width: 100% !important; /* 调整为100%以匹配图片宽度 */
+    max-height: 80vh !important; /* 增加最大高度限制 */
+    object-fit: contain !important;
+}
+
+/* 修改放大查看时的视频样式 */
+.mediaContainer video {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 80vh !important;
+    object-fit: contain !important;
+}
+
+/* 为移动端调整视频尺寸 */
+@media (max-width: 768px) {
+    video {
+        width: 100% !important;
+        max-height: 50vh !important;
+    }
+    
+    .mediaContainer video {
+        width: 100% !important;
+        max-height: 50vh !important;
+    }
+}
+
+/* 进一步适配更小屏幕 */
+@media (max-width: 480px) {
+    video {
+        width: 100% !important;
+        max-height: 40vh !important;
+    }
+    
+    .mediaContainer video {
+        width: 100% !important;
+        max-height: 40vh !important;
     }
 }
 
