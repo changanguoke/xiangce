@@ -1779,14 +1779,6 @@ video {
             if (video) {
                 video.pause();
                 video.currentTime = 0;
-                
-                // 恢复背景音乐（如果之前是播放状态）
-                const bgm = document.getElementById('bgm');
-                if (bgm && isMusicPlaying) {
-                    bgm.play().catch(error => {
-                        console.log('背景音乐恢复播放失败:', error);
-                    });
-                }
             }
             
             if (overlayAudio) {
@@ -1799,6 +1791,14 @@ video {
                 // 恢复轨道动画
                 const track = document.querySelector('.image-track');
                 track.style.animationPlayState = 'running';
+                
+                // 恢复背景音乐（如果之前是播放状态）
+                const bgm = document.getElementById('bgm');
+                if (bgm && isMusicPlaying) {
+                    bgm.play().catch(error => {
+                        console.log('背景音乐恢复播放失败:', error);
+                    });
+                }
             }, 300);
         }
     </script>
