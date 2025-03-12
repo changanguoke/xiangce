@@ -50,15 +50,16 @@
         .snowflake {
             position: absolute;
             color: #fff;
-            font-size: 1em;
-            opacity: 0;
-            animation: fall linear infinite;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            z-index: 1;
+            pointer-events: none;
+            animation: fall linear infinite;  /* 修改为无限循环动画 */
         }
         
         @keyframes fall {
             0% {
                 opacity: 0;
-                transform: translateY(-20vh) rotate(0deg);
+                transform: translateY(-20px) rotate(0deg);
             }
             20% {
                 opacity: 1;
@@ -1183,30 +1184,35 @@ video {
 
         // 动态创建雪花
         function createSnowflakes() {
-            const snowflakesContainer = document.querySelector('.snowflakes');
-            const snowflakeChars = ['❅'];
-            const snowflakeCount = 1000; // 每次创建的雪花数量
-            
-            function createSnowflake() {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.style.left = Math.random() * 1000 + '%';
-                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2-5秒
-                snowflake.style.opacity = Math.random();
-                snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
-                
-                snowflakesContainer.appendChild(snowflake);
-                
-                // 当动画结束后移除雪花
-                snowflake.addEventListener('animationend', () => {
-                    snowflake.remove();
-                });
-            }
-            
-            // 每200ms创建一个新雪花
-            setInterval(createSnowflake, 20);
+    const snowflakesContainer = document.querySelector('.snowflakes');
+    const snowflakeChars = ['❅', '❆', '❄']; 
+    const maxSnowflakes = 8000; // 减少最大雪花数量以提高性能
+    
+    function createSnowflake() {
+        // 如果雪花数量超过限制,则不创建新雪花
+        if (snowflakesContainer.children.length >= maxSnowflakes) {
+            return;
         }
+
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
         
+        // 随机设置雪花的起始位置和属性
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.top = '-20px';
+        snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+        snowflake.innerHTML = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+        snowflake.style.fontSize = Math.random() * 15 + 10 + 'px';
+        
+        // 添加到容器
+        snowflakesContainer.appendChild(snowflake);
+    }
+
+    // 每50ms创建一个新雪花
+    setInterval(createSnowflake, 50);
+}
+
         // 页面加载完成后启动雪花效果
         window.addEventListener('load', createSnowflakes);
 
