@@ -1150,7 +1150,7 @@ video {
     <!-- 系统占用显示器 -->
     <div class="performance-monitor">
         <div>FPS: <span id="fps">0</span></div>
-        <div>内存: <span id="memory">0</span> MB</div>
+        <div>内存: <span id="memory">--</span> MB</div>
     </div>
 
     <script>
@@ -1830,34 +1830,62 @@ video {
             }, 300);
         }
 
-        // 性能监视器实现
-        const fpsElement = document.getElementById('fps');
-        const memoryElement = document.getElementById('memory');
-        let lastTime = performance.now();
-        let frames = 0;
-
-        function updatePerformance() {
-            // 更新 FPS
-            const now = performance.now();
-            frames++;
-            
-            if (now >= lastTime + 1000) {
-                fpsElement.textContent = frames;
-                frames = 0;
-                lastTime = now;
-            }
-            
-            // 更新内存使用情况
-            if (window.performance && window.performance.memory) {
-                const memory = Math.round(window.performance.memory.usedJSHeapSize / 1048576);
-                memoryElement.textContent = memory;
-            }
-            
-            requestAnimationFrame(updatePerformance);
+        // 替换现有的性能监视器代码
+const performanceMonitor = {
+    frames: 0,
+    lastTime: performance.now(),
+    
+    init() {
+        this.fpsElement = document.getElementById('fps');
+        this.memoryElement = document.getElementById('memory');
+        this.update();
+        this.updateMemory();
+    },
+    
+    update() {
+        const now = performance.now();
+        this.frames++;
+        
+        if (now >= this.lastTime + 1000) {
+            const fps = Math.round(this.frames * 1000 / (now - this.lastTime));
+            this.fpsElement.textContent = fps;
+            this.frames = 0;
+            this.lastTime = now;
         }
+        
+        requestAnimationFrame(() => this.update());
+    },
+    
+    updateMemory() {
+        if (window.performance && window.performance.memory) {
+            const memory = performance.memory;
+            const used = Math.round(memory.usedJSHeapSize / (1024 * 1024));
+            const total = Math.round(memory.totalJSHeapSize / (1024 * 1024));
+            const limit = Math.round(memory.jsHeapSizeLimit / (1024 * 1024));
+            
+            this.memoryElement.textContent = `${used}MB / ${total}MB (上限: ${limit}MB)`;
+            
+            // 根据实际内存使用率设置颜色
+            const usageRatio = used / total;
+            if (usageRatio > 0.8) {
+                this.memoryElement.style.color = '#ff4444';  // 红色
+            } else if (usageRatio > 0.6) {
+                this.memoryElement.style.color = '#ffff00';  // 黄色
+            } else {
+                this.memoryElement.style.color = '#00ff00';  // 绿色
+            }
+        } else {
+            this.memoryElement.textContent = '浏览器不支持内存监控';
+        }
+        
+        // 每秒更新内存信息
+        setTimeout(() => this.updateMemory(), 1000);
+    }
+};
 
-        // 启动性能监视器
-        updatePerformance();
+window.addEventListener('load', () => {
+    performanceMonitor.init();
+});
     </script>
 </body>
 </html>
