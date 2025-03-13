@@ -254,7 +254,7 @@
 
             /* 修改图片和视频容器的宽度 */
             [class*="Container"] > div {
-                width: 100% !important; /* 强制占满容器宽度 */
+                width: 100% !重要; /* 强制占满容器宽度 */
             }
 
             /* 调整视频播放器大小 */
@@ -277,7 +277,7 @@
             }
             .album-home .thumbnails img {
                 width: 80px;
-                height: 60px;
+                height: 60px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
             }
             .gallery-container {
                 width: 95vw;
@@ -679,34 +679,34 @@ video {
     width: 100% !important;
     height: 100% !important;
     max-height: 80vh !important;
-    object-fit: contain !important;
+    object-fit: contain !重要;
 }
 
 /* 为移动端调整视频尺寸 */
 @media (max-width: 768px) {
     video {
         width: 100% !important;
-        max-height: 50vh !important;
-        pointer-events: auto !important; /* 允许点击事件 */
+        max-height: 50vh !重要;
+        pointer-events: auto !重要; /* 允许点击事件 */
     }
     
     .mediaContainer video {
-        width: 100% !important;
-        max-height: 50vh !important;
-        pointer-events: auto !important; /* 允许点击事件 */
+        width: 100% !重要;
+        max-height: 50vh !重要;
+        pointer-events: auto !重要; /* 允许点击事件 */
     }
 }
 
 /* 进一步适配更小屏幕 */
 @media (max-width: 480px) {
     video {
-        width: 100% !important;
-        max-height: 40vh !important;
+        width: 100% !重要;
+        max-height: 40vh !重要;
     }
     
     .mediaContainer video {
-        width: 100% !important;
-        max-height: 40vh !important;
+        width: 100% !重要;
+        max-height: 40vh !重要;
     }
 }
 
@@ -822,7 +822,7 @@ video {
                 <img src="img/image (13).jpg" class="image-item">
                 <div class="music-player">
                     <audio controls>
-                        <source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
+                        <<source src="http://music.163.com/song/media/outer/url?id=YOUR_MUSIC_ID.mp3" type="audio/mpeg">
                     </audio>
                 </div>
             </div>
@@ -1834,52 +1834,83 @@ video {
 const performanceMonitor = {
     frames: 0,
     lastTime: performance.now(),
+    memoryReadings: [],
     
     init() {
         this.fpsElement = document.getElementById('fps');
         this.memoryElement = document.getElementById('memory');
         this.update();
         this.updateMemory();
+        
+        // 监听页面可见性变化
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                this.lastTime = performance.now();
+                this.frames = 0;
+            }
+        });
     },
     
     update() {
-        const now = performance.now();
-        this.frames++;
-        
-        if (now >= this.lastTime + 1000) {
-            const fps = Math.round(this.frames * 1000 / (now - this.lastTime));
-            this.fpsElement.textContent = fps;
-            this.frames = 0;
-            this.lastTime = now;
+        if (!document.hidden) {
+            const now = performance.now();
+            this.frames++;
+            
+            if (now >= this.lastTime + 1000) {
+                const fps = Math.round(this.frames * 1000 / (now - this.lastTime));
+                this.fpsElement.textContent = fps;
+                this.frames = 0;
+                this.lastTime = now;
+            }
         }
-        
         requestAnimationFrame(() => this.update());
     },
     
     updateMemory() {
-        if (window.performance && window.performance.memory) {
-            const memory = performance.memory;
-            const used = Math.round(memory.usedJSHeapSize / (1024 * 1024));
-            const total = Math.round(memory.totalJSHeapSize / (1024 * 1024));
-            const limit = Math.round(memory.jsHeapSizeLimit / (1024 * 1024));
-            
-            this.memoryElement.textContent = `${used}MB / ${total}MB (上限: ${limit}MB)`;
-            
-            // 根据实际内存使用率设置颜色
-            const usageRatio = used / total;
-            if (usageRatio > 0.8) {
-                this.memoryElement.style.color = '#ff4444';  // 红色
-            } else if (usageRatio > 0.6) {
-                this.memoryElement.style.color = '#ffff00';  // 黄色
-            } else {
-                this.memoryElement.style.color = '#00ff00';  // 绿色
+        if (navigator.deviceMemory) {
+            try {
+                const memory = navigator.deviceMemory;
+                const used = Math.round(memory * 1024); // 转换为MB
+                
+                console.log('Memory Info:', memory); // 添加调试信息
+                
+                // 保存最近的10个内存读数
+                this.memoryReadings.push(used);
+                if (this.memoryReadings.length > 10) {
+                    this.memoryReadings.shift();
+                }
+                
+                // 计算平均值和变化率
+                const avg = this.memoryReadings.reduce((a, b) => a + b, 0) / this.memoryReadings.length;
+                const delta = this.memoryReadings.length > 1 ? 
+                    used - this.memoryReadings[this.memoryReadings.length - 2] : 0;
+                
+                // 更新显示
+                this.memoryElement.textContent = `${used}MB (Δ${delta >= 0 ? '+' : ''}${delta}MB)`;
+                
+                // 设置颜色指示
+                if (delta > 5) {
+                    this.memoryElement.style.color = '#ff4444'; // 红色，内存快速增长
+                } else if (delta > 2) {
+                    this.memoryElement.style.color = '#ffff00'; // 黄色，内存缓慢增长
+                } else {
+                    this.memoryElement.style.color = '#00ff00'; // 绿色，内存稳定
+                }
+                
+                // 强制垃圾回收检测
+                if (used > 10000) { // 如果内存使用超过1GB
+                    console.warn('内存使用过高，建议刷新页面');
+                }
+            } catch (e) {
+                console.error('内存监控错误:', e);
+                this.memoryElement.textContent = '监控出错';
             }
         } else {
-            this.memoryElement.textContent = '浏览器不支持内存监控';
+            console.warn('不支持内存监控'); // 添加调试信息
+            this.memoryElement.textContent = '不支持内存监控';
         }
         
-        // 每秒更新内存信息
-        setTimeout(() => this.updateMemory(), 1000);
+        setTimeout(() => this.updateMemory(), 10000);
     }
 };
 
