@@ -1,0 +1,4 @@
+const USER_CREDENTIALS = {
+    username: '8629de32999f70c668e7909ac9c7f9c2d4624263962d8d3a27c548c7edf3a352',
+    password: 'cd6d0ea798f8b966259978dd42ddd8e4762795db1ce739ae28cde5c87c90ee44'
+};

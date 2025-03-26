@@ -1,0 +1,115 @@
+.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访问错误</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #ff4444;
+        }
+
+        p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            font-size: 1.2em;
+            color: #ff8888;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>⚠️ 访问错误</h1>
+        <p>检测到非法访问或操作</p>
+        <p>系统将在 <span id="countdown">5</span> 秒后自动返回登录页面</p>
+    </div>
+
+    <script>
+        // 禁用右键菜单
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 禁用 F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.keyCode === 123 || // F12
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+                (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 倒计时重定向
+        let countdown = 5;
+        const countdownDisplay = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            countdown--;
+            countdownDisplay.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.href = 'login.html';
+            }
+        }, 1000);
+
+        // 防止页面被嵌入iframe
+        if (window.top !== window.self) {
+            window.top.location = window.self.location;
+        }
+
+        // 检测开发者工具
+        setInterval(() => {
+            const devtools = /./;
+            devtools.toString = function() {
+                this.opened = true;
+            }
+            console.log('%c', devtools);
+            if (devtools.opened) {
+                window.location.reload();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
