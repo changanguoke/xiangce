@@ -1,4 +1,3 @@
-.html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -61,6 +60,18 @@
         <h1>⚠️ 访问错误</h1>
         <p>检测到非法访问或操作</p>
         <p>系统将在 <span id="countdown">5</span> 秒后自动返回登录页面</p>
+        <div id="manual-redirect" style="display:none;">
+            <p>如果没有自动跳转，请点击下面的按钮：</p>
+            <button onclick="window.location.href='index1.html'" 
+                    style="padding: 10px 20px; 
+                           background: #ff4444; 
+                           border: none; 
+                           color: white; 
+                           border-radius: 5px; 
+                           cursor: pointer;">
+                返回登录页面
+            </button>
+        </div>
     </div>
 
     <script>
@@ -80,36 +91,54 @@
             }
         });
 
-        // 倒计时重定向
+        // 捕获全局错误
+        window.onerror = function(msg, url, line, col, error) {
+            console.error(`错误: ${msg}\nURL: ${url}\n行: ${line}, 列: ${col}\n错误对象:`, error);
+            return false;
+        };
+
+        // 初始化变量
         let countdown = 5;
         const countdownDisplay = document.getElementById('countdown');
-        
+        let hasRedirected = false; // 添加标志位
+
+        // 重定向到登录页面
+        function redirectToLogin() {
+            if (hasRedirected) return; // 如果已经重定向过，则直接返回
+            hasRedirected = true; // 设置标志位为 true
+            const loginPage = './index1.html'; // 使用相对路径
+            console.log('尝试重定向到:', loginPage);
+            try {
+                window.location.href = loginPage;
+            } catch (e) {
+                console.error('重定向失败:', e);
+                alert('重定向失败，请检查 index1.html 是否存在');
+            }
+        }
+
+        // 倒计时逻辑
         const timer = setInterval(() => {
             countdown--;
             countdownDisplay.textContent = countdown;
-            
-            if (countdown <= 0) {
+            if (countdown < 0) {
                 clearInterval(timer);
-                window.location.href = 'login.html';
+                document.getElementById('manual-redirect').style.display = 'block';
+                redirectToLogin(); // 倒计时结束后立即重定向
             }
         }, 1000);
 
-        // 防止页面被嵌入iframe
+        // 页面加载时重置标志位
+        window.onload = function () {
+            hasRedirected = false; // 确保每次加载页面时重置标志位
+            countdown = 5; // 重置倒计时
+            countdownDisplay.textContent = countdown; // 更新倒计时显示
+            document.getElementById('manual-redirect').style.display = 'none'; // 隐藏手动跳转按钮
+        };
+
+        // 防止页面被嵌入 iframe
         if (window.top !== window.self) {
             window.top.location = window.self.location;
         }
-
-        // 检测开发者工具
-        setInterval(() => {
-            const devtools = /./;
-            devtools.toString = function() {
-                this.opened = true;
-            }
-            console.log('%c', devtools);
-            if (devtools.opened) {
-                window.location.reload();
-            }
-        }, 1000);
     </script>
 </body>
 </html>

@@ -2224,30 +2224,29 @@ function handleAudioPause(audio) {
     // 获取所有带有 data-active 标记的视频
     const activeVideos = document.querySelectorAll('video[data-active="true"]');
     
-    activeVideos.forEach(video => {
-        // 检查是否有其他音频在播放
-        const isAnyAudioPlaying = Array.from(document.querySelectorAll('audio'))
-            .some(otherAudio => !otherAudio.paused);
-            
-        // 如果没有任何音频在播放，则恢复视频播放
-        if (!isAnyAudioPlaying) {
-            // 尝试恢复视频播放
+    // 检查是否有其他音频在播放
+    const isAnyAudioPlaying = Array.from(document.querySelectorAll('audio'))
+        .some(otherAudio => otherAudio !== audio && !otherAudio.paused);
+        
+    // 只有在没有其他音频播放时才恢复视频播放
+    if (!isAnyAudioPlaying) {
+        activeVideos.forEach(video => {
             video.play().catch(error => {
                 console.log('视频恢复播放失败:', error);
             });
-        }
-    });
+        });
+    }
 }
 
 // 修改音频事件监听器
 document.querySelectorAll('.music-player audio, .overlay-music-player audio').forEach(audio => {
     // 播放事件
     audio.addEventListener('play', () => {
-        // 查找当前正在播放的视频并标记
+        // 标记并暂停当前播放的视频
         document.querySelectorAll('video').forEach(video => {
             if (!video.paused) {
+                video.dataset.active = "true"; // 标记视频状态
                 video.pause();
-                video.dataset.active = "true";
             }
         });
         
@@ -2259,14 +2258,12 @@ document.querySelectorAll('.music-player audio, .overlay-music-player audio').fo
         });
     });
 
-    // 暂停事件
-    audio.addEventListener('pause', () => {
-        setTimeout(() => handleAudioPause(audio), 100);
-    });
-
-    // 播放结束事件
-    audio.addEventListener('ended', () => {
-        setTimeout(() => handleAudioPause(audio), 100);
+    // 暂停和结束事件
+    ['pause', 'ended'].forEach(eventType => {
+        audio.addEventListener(eventType, () => {
+            // 使用setTimeout确保其他事件处理完成
+            setTimeout(() => handleAudioPause(audio), 100);
+        });
     });
 });
 
@@ -2275,28 +2272,87 @@ document.querySelectorAll('video').forEach(video => {
     video.addEventListener('play', () => {
         video.dataset.active = "true";
         
-        // 暂停所有音频
+        // 暂停所有正在播放的音频
         document.querySelectorAll('audio').forEach(audio => {
             if (!audio.paused) {
                 audio.pause();
+                // 标记这个音频是被视频暂停的
+                audio.dataset.pausedByVideo = "true";
             }
         });
     });
     
     video.addEventListener('pause', () => {
-        // 仅在非音频播放导致的暂停时移除标记
-        const isAudioPlaying = Array.from(document.querySelectorAll('audio'))
-            .some(audio => !audio.paused);
-            
-        if (!isAudioPlaying) {
-            delete video.dataset.active;
-        }
+        // 检查是否有音频标记为被视频暂停
+        document.querySelectorAll('audio[data-paused-by-video="true"]').forEach(audio => {
+            // 恢复被视频暂停的音频播放
+            audio.play().catch(() => {});
+            // 移除标记
+            delete audio.dataset.pausedByVideo;
+        });
+        
+        // 移除视频的激活状态标记
+        delete video.dataset.active;
     });
     
     video.addEventListener('ended', () => {
         delete video.dataset.active;
+        // 检查并恢复被暂停的音频
+        document.querySelectorAll('audio[data-paused-by-video="true"]').forEach(audio => {
+            audio.play().catch(() => {});
+            delete audio.dataset.pausedByVideo;
+        });
     });
 });
+
+// 添加到现有的 script 标签内部
+(function() {
+    // 禁用右键
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // 禁用 F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+    document.addEventListener('keydown', function(e) {
+        if (
+            e.keyCode === 123 || // F12
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+            (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+            (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 检测开发者工具
+    const devtools = {
+        isOpen: false,
+        orientation: undefined
+    };
+
+    // 检测开发者工具的打开
+    setInterval(() => {
+        const widthThreshold = window.outerWidth - window.innerWidth > 160;
+        const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        
+        if (
+            !(heightThreshold && widthThreshold) &&
+            ((window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized) || widthThreshold || heightThreshold)
+        ) {
+            if (!devtools.isOpen) {
+                devtools.isOpen = true;
+                // 清空页面内容
+                document.body.innerHTML = '禁止使用开发者工具查看页面内容！';
+                // 可选：重定向到其他页面
+                // window.location.href = 'error.html';
+            }
+        } else {
+            devtools.isOpen = false;
+        }
+    }, 1000);
+
+    // 禁用控制台输出
+    console.log = console.warn = console.debug = console.info = function() {};
+})();
     </script>
 </body>
 </html>
